@@ -39,6 +39,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.ServerSocket;
+import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.util.HashMap;
@@ -91,7 +92,7 @@ public class StreamPerfTestTest {
   }
 
   private static HttpResponse httpRequest(String urlString) throws Exception {
-    URL url = new URL(urlString);
+    URL url = new URI(urlString).toURL();
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     try {
       con.setRequestMethod("GET");
