@@ -5,7 +5,7 @@
 ifndef::imagesdir[:imagesdir: images]
 :source-highlighter: prettify
 
-The RabbitMQ Stream Java Client is a Java library to test the https://rabbitmq.com/stream.html[RabbitMQ Stream Plugin].
+RabbitMQ Stream PerfTest is a Java tool to test the https://rabbitmq.com/stream.html[RabbitMQ Stream Plugin].
 
 include::getting-started.adoc[]
 

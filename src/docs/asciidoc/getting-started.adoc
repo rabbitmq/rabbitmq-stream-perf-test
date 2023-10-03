@@ -1,11 +1,18 @@
 == Getting Started
 
+Stream PerfTest uses the https://github.com/rabbitmq/rabbitmq-server/blob/main/deps/rabbitmq_stream/docs/PROTOCOL.adoc[stream protocol] to communicate with a RabbitMQ cluster.
+Use https://perftest.rabbitmq.com[PerfTest] if you want to test streams or queues with https://www.rabbitmq.com/tutorials/amqp-concepts.html[AMQP 0.9.1].
+
 Stream PerfTest is usable as an uber JAR
 https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[downloadable from GitHub Release] or as a https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test[Docker image].
 It can be built separately as well.
 
 Snapshots are on https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[GitHub release] as well.
 Use the `pivotalrabbitmq/stream-perf-test:dev` image to use the latest snapshot in Docker.
+
+== Pre-requisites
+
+Stream PerfTest requires Java 11 or later to run.
 
 === With Docker
 
