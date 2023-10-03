@@ -1,0 +1,131 @@
+== Getting Started
+
+Stream PerfTest is usable as an uber JAR
+https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[downloadable from GitHub Release] or as a https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test[Docker image].
+It can be built separately as well.
+
+Snapshots are on https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[GitHub release] as well.
+Use the `pivotalrabbitmq/stream-perf-test:dev` image to use the latest snapshot in Docker.
+
+=== With Docker
+
+The performance tool is available as a
+https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test[Docker image].
+You can use the Docker image to list the available options:
+
+.Listing the available options of the performance tool
+----
+docker run -it --rm pivotalrabbitmq/stream-perf-test --help
+----
+
+There are all sorts of options, if none is provided, the tool will start publishing to and consuming from a stream created only for the test.
+
+When using Docker, the container running the performance tool must be able to connect to the broker, so you have to figure out the appropriate Docker configuration to make this possible.
+You can have a look at the https://docs.docker.com/network/[Docker network documentation] to find out more.
+
+[NOTE]
+.Docker on macOS
+====
+Docker runs on a virtual machine when using macOS, so do not expect high performance  when using RabbitMQ Stream and the performance tool inside Docker on a Mac.
+====
+
+We show next a couple of options to easily use the Docker image.
+
+==== With Docker Host Network Driver
+
+This is the simplest way to run the image locally, with a local broker running in Docker as well.
+The containers use the https://docs.docker.com/network/host/[host network],
+this is perfect for experimenting locally.
+
+.Running the broker and performance tool with the host network driver
+[source,shell,subs="attributes,specialcharacters"]
+----
+# run the broker
+docker run -it --rm --name rabbitmq --network host rabbitmq:{broker-version}
+# open another terminal and enable the stream plugin
+docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream
+# run the performance tool
+docker run -it --rm --network host pivotalrabbitmq/stream-perf-test
+----
+
+[NOTE]
+.Docker Host Network Driver Support
+====
+According to Docker's documentation, the host networking driver *only works on Linux hosts*.
+Nevertheless, the commands above work on some Mac hosts.
+====
+
+==== With Docker Bridge Network Driver
+
+Containers need to be able to communicate with each other with
+the https://docs.docker.com/network/bridge/[bridge network driver], this
+can be done by defining a network and running the containers in this network.
+
+.Running the broker and performance tool with the bridge network driver
+[source,shell,subs="attributes,specialcharacters"]
+----
+# create a network
+docker network create stream-perf-test
+# run the broker
+docker run -it --rm --network stream-perf-test --name rabbitmq rabbitmq:{broker-version}
+# open another terminal and enable the stream plugin
+docker exec rabbitmq rabbitmq-plugins enable rabbitmq_stream
+# run the performance tool
+docker run -it --rm --network stream-perf-test pivotalrabbitmq/stream-perf-test \
+    --uris rabbitmq-stream://rabbitmq:5552
+----
+
+=== With the Java Binary
+
+The Java binary is available on
+https://github.com/rabbitmq/rabbitmq-stream-java-client/releases[GitHub Release].
+https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[Snaphots] are available as well. To use the latest snapshot:
+
+----
+wget https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest.jar
+----
+
+To launch a run:
+
+----
+$ java -jar stream-perf-test-latest.jar
+17:51:26.207 [main] INFO  c.r.stream.perf.StreamPerfTest - Starting producer
+1, published 560277 msg/s, confirmed 554088 msg/s, consumed 556983 msg/s, latency min/median/75th/95th/99th 2663/9799/13940/52304/57995 µs, chunk size 1125
+2, published 770722 msg/s, confirmed 768209 msg/s, consumed 768585 msg/s, latency min/median/75th/95th/99th 2454/9599/12206/23940/55519 µs, chunk size 1755
+3, published 915895 msg/s, confirmed 914079 msg/s, consumed 916103 msg/s, latency min/median/75th/95th/99th 2338/8820/11311/16750/52985 µs, chunk size 2121
+4, published 1004257 msg/s, confirmed 1003307 msg/s, consumed 1004981 msg/s, latency min/median/75th/95th/99th 2131/8322/10639/14368/45094 µs, chunk size 2228
+5, published 1061380 msg/s, confirmed 1060131 msg/s, consumed 1061610 msg/s, latency min/median/75th/95th/99th 2131/8247/10420/13905/37202 µs, chunk size 2379
+6, published 1096345 msg/s, confirmed 1095947 msg/s, consumed 1097447 msg/s, latency min/median/75th/95th/99th 2131/8225/10334/13722/33109 µs, chunk size 2454
+7, published 1127791 msg/s, confirmed 1127032 msg/s, consumed 1128039 msg/s, latency min/median/75th/95th/99th 1966/8150/10172/13500/23940 µs, chunk size 2513
+8, published 1148846 msg/s, confirmed 1148086 msg/s, consumed 1149121 msg/s, latency min/median/75th/95th/99th 1966/8079/10135/13248/16771 µs, chunk size 2558
+9, published 1167067 msg/s, confirmed 1166369 msg/s, consumed 1167311 msg/s, latency min/median/75th/95th/99th 1966/8063/9986/12977/16757 µs, chunk size 2631
+10, published 1182554 msg/s, confirmed 1181938 msg/s, consumed 1182804 msg/s, latency min/median/75th/95th/99th 1966/7963/9949/12632/16619 µs, chunk size 2664
+11, published 1197069 msg/s, confirmed 1196495 msg/s, consumed 1197291 msg/s, latency min/median/75th/95th/99th 1966/7917/9955/12503/15386 µs, chunk size 2761
+12, published 1206687 msg/s, confirmed 1206176 msg/s, consumed 1206917 msg/s, latency min/median/75th/95th/99th 1966/7893/9975/12503/15280 µs, chunk size 2771
+...
+^C
+Summary: published 1279444 msg/s, confirmed 1279019 msg/s, consumed 1279019 msg/s, latency 95th 12161 µs, chunk size 2910
+----
+
+The previous command will start publishing to and consuming from a `stream` stream that
+will be created. The tool outputs live metrics on the console and write more
+detailed metrics in a `stream-perf-test-current.txt` file that get renamed to
+`stream-perf-test-yyyy-MM-dd-HHmmss.txt` when the run ends.
+
+To see the options:
+
+----
+java -jar stream-perf-test-latest.jar --help
+----
+
+The performance tool comes also with a
+https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest_completion[completion script].
+You can download it and enable it in your `~/.zshrc` file:
+
+----
+alias stream-perf-test='java -jar target/stream-perf-test.jar'
+source ~/.zsh/stream-perf-test_completion
+----
+
+Note the activation requires an alias which must be `stream-perf-test`. The command can be anything
+though.
