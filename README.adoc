@@ -5,7 +5,7 @@ image:https://github.com/rabbitmq/rabbitmq-stream-perf-test/actions/workflows/te
 This repository contains source code of the RabbitMQ Stream Performance Testing Tool.
 The client is maintained by the https://github.com/rabbitmq/[RabbitMQ team at VMware].
 
-Stream PerfTest uses the https://github.com/rabbitmq/rabbitmq-server/blob/main/deps/rabbitmq_stream/docs/PROTOCOL.adoc[stream protocol] to communicate with a RabbitMQ cluster.
+Stream PerfTest is based on the https://github.com/rabbitmq/rabbitmq-stream-java-client/[stream Java client] and uses the https://github.com/rabbitmq/rabbitmq-server/blob/main/deps/rabbitmq_stream/docs/PROTOCOL.adoc[stream protocol] to communicate with a RabbitMQ cluster.
 Use https://perftest.rabbitmq.com[PerfTest] if you want to test streams or queues with https://www.rabbitmq.com/tutorials/amqp-concepts.html[AMQP 0.9.1].
 
 == Pre-requisites
