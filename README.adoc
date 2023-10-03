@@ -17,7 +17,7 @@ Stream PerfTest requires Java 11 or later to run.
 This is a standalone tool that is distributed in binary form using https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[GitHub releases].
 A https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test/[Docker image] is available as well.
 
-The https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/tag/v-rabbitmq-stream-perf-test-latest[latest snapshot] is also available.
+The https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/tag/v-stream-perf-test-latest[latest snapshot] is also available.
 
 == Documentation
 

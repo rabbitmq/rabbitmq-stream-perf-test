@@ -84,9 +84,8 @@ docker run -it --rm --network stream-perf-test pivotalrabbitmq/stream-perf-test 
 
 === With the Java Binary
 
-The Java binary is available on
-https://github.com/rabbitmq/rabbitmq-stream-java-client/releases[GitHub Release].
-https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[Snaphots] are available as well. To use the latest snapshot:
+The Java binary is available on https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[GitHub Release].
+https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[Snapshots] are available as well. To use the latest snapshot:
 
 ----
 wget https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest.jar
