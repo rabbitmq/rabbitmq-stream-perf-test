@@ -8,6 +8,10 @@ The client is maintained by the https://github.com/rabbitmq/[RabbitMQ team at VM
 Stream PerfTest uses the https://github.com/rabbitmq/rabbitmq-server/blob/master/deps/rabbitmq_stream/docs/PROTOCOL.adoc[stream protocol] to communicate with a RabbitMQ cluster.
 Use https://perftest.rabbitmq.com[PerfTest] if you want to test streams or queues with https://www.rabbitmq.com/tutorials/amqp-concepts.html[AMQP 0.9.1].
 
+== Pre-requisites
+
+Stream PerfTest requires Java 11 or later
+
 == Installation
 
 This is a standalone tool that is distributed in binary form using https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[GitHub releases].
@@ -24,21 +28,21 @@ The https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/tag/v-
 
 Download the latest snapshot:
 
-```shell
+----
 wget https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest.jar
-```
+----
 
 Launch a performance test with 1 producer and 1 consumer:
 
-```shell
+----
 java -jar stream-perf-test-latest.jar
-```
+----
 
 Use
 
-```shell
+----
 java -jar stream-perf-test-latest.jar --help
-```
+----
 
 to see all supported options.
 
