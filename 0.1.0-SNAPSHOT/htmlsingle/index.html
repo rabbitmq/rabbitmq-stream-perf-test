@@ -528,12 +528,13 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <h1>RabbitMQ Stream PerfTest</h1>
 <div class="details">
 <span id="revnumber">version 0.1.0-SNAPSHOT</span>
-<br><span id="revremark">(f14a3eb)</span>
+<br><span id="revremark">(eb74b7f)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#getting-started">Getting Started</a>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#pre-requisites">Pre-requisites</a>
 <ul class="sectlevel2">
 <li><a href="#with-docker">With Docker</a>
 <ul class="sectlevel3">
@@ -580,13 +581,17 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The RabbitMQ Stream Java Client is a Java library to test the <a href="https://rabbitmq.com/stream.html">RabbitMQ Stream Plugin</a>.</p>
+<p>RabbitMQ Stream PerfTest is a Java tool to test the <a href="https://rabbitmq.com/stream.html">RabbitMQ Stream Plugin</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="getting-started"><a class="anchor" href="#getting-started"></a>Getting Started</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Stream PerfTest uses the <a href="https://github.com/rabbitmq/rabbitmq-server/blob/main/deps/rabbitmq_stream/docs/PROTOCOL.adoc">stream protocol</a> to communicate with a RabbitMQ cluster.
+Use <a href="https://perftest.rabbitmq.com">PerfTest</a> if you want to test streams or queues with <a href="https://www.rabbitmq.com/tutorials/amqp-concepts.html">AMQP 0.9.1</a>.</p>
+</div>
 <div class="paragraph">
 <p>Stream PerfTest is usable as an uber JAR
 <a href="https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases">downloadable from GitHub Release</a> or as a <a href="https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test">Docker image</a>.
@@ -595,6 +600,14 @@ It can be built separately as well.</p>
 <div class="paragraph">
 <p>Snapshots are on <a href="https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases">GitHub release</a> as well.
 Use the <code>pivotalrabbitmq/stream-perf-test:dev</code> image to use the latest snapshot in Docker.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="pre-requisites"><a class="anchor" href="#pre-requisites"></a>Pre-requisites</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Stream PerfTest requires Java 11 or later to run.</p>
 </div>
 <div class="sect2">
 <h3 id="with-docker"><a class="anchor" href="#with-docker"></a>With Docker</h3>
@@ -1531,7 +1544,7 @@ Use the <code>rabbitmq.streamperftest.loggers</code> system property with <code>
 <div id="footer">
 <div id="footer-text">
 Version 0.1.0-SNAPSHOT<br>
-Last updated 2023-10-03 13:12:59 UTC
+Last updated 2023-10-03 13:18:52 UTC
 </div>
 </div>
 </body>
