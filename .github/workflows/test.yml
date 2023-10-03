@@ -6,9 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
 jobs:
   build:
     runs-on: ubuntu-22.04
