@@ -4,6 +4,7 @@
 :appendix-caption: Appendix
 ifndef::imagesdir[:imagesdir: images]
 :source-highlighter: prettify
+:icons: font
 
 RabbitMQ Stream PerfTest is a Java tool to test the https://rabbitmq.com/stream.html[RabbitMQ Stream Plugin].
 

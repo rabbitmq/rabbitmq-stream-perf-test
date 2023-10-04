@@ -1,13 +1,13 @@
 == Getting Started
 
-Stream PerfTest is based on the https://github.com/rabbitmq/rabbitmq-stream-java-client/[stream Java client] and uses the https://github.com/rabbitmq/rabbitmq-server/blob/main/deps/rabbitmq_stream/docs/PROTOCOL.adoc[stream protocol] to communicate with a RabbitMQ cluster.
-Use https://perftest.rabbitmq.com[PerfTest] if you want to test streams or queues with https://www.rabbitmq.com/tutorials/amqp-concepts.html[AMQP 0.9.1].
+Stream PerfTest is based on the https://github.com/rabbitmq/rabbitmq-stream-java-client/[stream Java client icon:external-link[]^] and uses the https://github.com/rabbitmq/rabbitmq-server/blob/main/deps/rabbitmq_stream/docs/PROTOCOL.adoc[stream protocol icon:external-link[]^] to communicate with a RabbitMQ cluster.
+Use https://perftest.rabbitmq.com[PerfTest icon:external-link[]^] if you want to test streams or queues with https://www.rabbitmq.com/tutorials/amqp-concepts.html[AMQP 0.9.1 icon:external-link[]^].
 
 Stream PerfTest is usable as an uber JAR
-https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[downloadable from GitHub Release] or as a https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test[Docker image].
+https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[downloadable from GitHub Release icon:external-link[]^] or as a https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test[Docker image icon:external-link[]^].
 It can be built separately as well.
 
-Snapshots are on https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[GitHub release] as well.
+Snapshots are on https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[GitHub release icon:external-link[]^] as well.
 Use the `pivotalrabbitmq/stream-perf-test:dev` image to use the latest snapshot in Docker.
 
 == Pre-requisites
@@ -17,7 +17,7 @@ Stream PerfTest requires Java 11 or later to run.
 === With Docker
 
 The performance tool is available as a
-https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test[Docker image].
+https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test[Docker image icon:external-link[]^].
 You can use the Docker image to list the available options:
 
 .Listing the available options of the performance tool
@@ -28,7 +28,7 @@ docker run -it --rm pivotalrabbitmq/stream-perf-test --help
 There are all sorts of options, if none is provided, the tool will start publishing to and consuming from a stream created only for the test.
 
 When using Docker, the container running the performance tool must be able to connect to the broker, so you have to figure out the appropriate Docker configuration to make this possible.
-You can have a look at the https://docs.docker.com/network/[Docker network documentation] to find out more.
+You can have a look at the https://docs.docker.com/network/[Docker network documentation icon:external-link[]^] to find out more.
 
 [NOTE]
 .Docker on macOS
@@ -41,7 +41,7 @@ We show next a couple of options to easily use the Docker image.
 ==== With Docker Host Network Driver
 
 This is the simplest way to run the image locally, with a local broker running in Docker as well.
-The containers use the https://docs.docker.com/network/host/[host network],
+The containers use the https://docs.docker.com/network/host/[host network icon:external-link[]^],
 this is perfect for experimenting locally.
 
 .Running the broker and performance tool with the host network driver
@@ -65,7 +65,7 @@ Nevertheless, the commands above work on some Mac hosts.
 ==== With Docker Bridge Network Driver
 
 Containers need to be able to communicate with each other with
-the https://docs.docker.com/network/bridge/[bridge network driver], this
+the https://docs.docker.com/network/bridge/[bridge network driver icon:external-link[]^], this
 can be done by defining a network and running the containers in this network.
 
 .Running the broker and performance tool with the bridge network driver
@@ -84,8 +84,8 @@ docker run -it --rm --network stream-perf-test pivotalrabbitmq/stream-perf-test 
 
 === With the Java Binary
 
-The Java binary is available on https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[GitHub Release].
-https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[Snapshots] are available as well. To use the latest snapshot:
+The Java binary is available on https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases[GitHub Release icon:external-link[]^].
+https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases[Snapshots icon:external-link[]^] are available as well. To use the latest snapshot:
 
 ----
 wget https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest.jar
@@ -125,7 +125,7 @@ java -jar stream-perf-test-latest.jar --help
 ----
 
 The performance tool comes also with a
-https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest_completion[completion script].
+https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest_completion[completion script icon:external-link[]^].
 You can download it and enable it in your `~/.zshrc` file:
 
 ----

@@ -4,7 +4,7 @@
 === Retention
 
 If you run performance tests for a long time, you might be interested in setting
-a https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#limiting-the-size-of-a-stream[retention strategy] for
+a https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#limiting-the-size-of-a-stream[retention strategy icon:external-link[]^] for
 the streams the performance tool creates for a run. This
 would typically avoid saturating the storage devices of your servers.
 The default values are 20 GB for the maximum size of a stream and
@@ -30,12 +30,12 @@ java -jar stream-perf-test.jar --max-age PT5M \
 ----
 
 The `--max-age` option uses the
-https://en.wikipedia.org/wiki/ISO_8601#Durations[ISO 8601 duration format].
+https://en.wikipedia.org/wiki/ISO_8601#Durations[ISO 8601 duration format icon:external-link[]^].
 
 === Offset (Consumer)
 
 Consumers start by default at the very end of a stream (offset `next`).
-It is possible to specify an https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#specifying-an-offset[offset]
+It is possible to specify an https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#specifying-an-offset[offset icon:external-link[]^]
 to start from with the `--offset` option,
 if you have existing streams, and you want to consume from them at a specific offset.
 The following command sets the consumer to start consuming at the beginning of
@@ -52,7 +52,7 @@ an unsigned long for a given offset, and an ISO 8601 formatted timestamp
 [[performance-tool-offset-tracking]]
 === Offset Tracking (Consumer)
 
-A consumer can https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#consumer-offset-tracking[track the point] it has reached
+A consumer can https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#consumer-offset-tracking[track the point icon:external-link[]^] it has reached
 in a stream to be able to restart where it left off in a new incarnation.
 The performance tool has the `--store-every` option to tell consumers to store
 the offset every `x` messages to be able to measure the impact of offset tracking
@@ -66,12 +66,12 @@ java -jar stream-perf-test.jar --store-every 100000
 [[consumer-names]]
 === Consumer Names
 
-When using `--store-every` (see above) for https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#consumer-offset-tracking[offset tracking],
+When using `--store-every` (see above) for https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#consumer-offset-tracking[offset tracking icon:external-link[]^],
 the performance tool uses a default name using the pattern `{stream-name}-{consumer-number}`.
 So the default name of a single tracking consumer consuming from `stream` will be `stream-1`.
 
 The consumer names pattern can be set with the `--consumer-names` option, which uses
-the https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html[Java printf-style format string].
+the https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html[Java printf-style format string icon:external-link[]^].
 The stream name and the consumer number are injected as arguments, in this order.
 
 The following table illustrates some examples for the `--consumer-names` option
@@ -98,7 +98,7 @@ as the pattern uses the consumer number first, which is not the pre-defined orde
 
 |`uuid`
 |`7cc75659-ea67-4874-96ef-151a505e1a55`
-|https://docs.oracle.com/javase/7/docs/api/java/util/UUID.html#randomUUID()[Random UUID] that
+|https://docs.oracle.com/javase/7/docs/api/java/util/UUID.html#randomUUID()[Random UUID icon:external-link[]^] that
 changes for every run.
 |===
 
@@ -111,7 +111,7 @@ tracking consumers would ignore the specified offset and would start where they 
 === Producer Names
 
 You can use the `--producer-names` option to set the producer names pattern and therefore
-enable https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#outbound-message-deduplication[message deduplication] (using the default
+enable https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#outbound-message-deduplication[message deduplication icon:external-link[]^] (using the default
 publishing sequence starting at 0 and incremented for each message).
 The same naming options apply as above in <<consumer-names, consumer names>> with the only
 difference that the default pattern is empty (i.e. no deduplication).
@@ -127,7 +127,7 @@ The run will start one producer and will use the `stream-1` producer reference (
 === Load Balancer in Front of the Cluster
 
 A load balancer can misguide the performance tool when it tries to connect to nodes that host stream leaders and replicas.
-The https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/["Connecting to Streams"] blog post covers why client applications must connect to the appropriate nodes in a cluster.
+The https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/["Connecting to Streams" icon:external-link[]^] blog post covers why client applications must connect to the appropriate nodes in a cluster.
 
 Use the `--load-balancer` flag to make sure the performance tool always goes through the load balancer that sits in front of your cluster:
 
@@ -136,12 +136,12 @@ java -jar stream-perf-test.jar --uris rabbitmq-stream://my-load-balancer:5552 \
                                --load-balancer
 ----
 
-The same blog post covers why a https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/#with-a-load-balancer[load balancer can make things more complicated] for client applications like the performance tool and how https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/#client-workaround-with-a-load-balancer[they can mitigate these issues].
+The same blog post covers why a https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/#with-a-load-balancer[load balancer can make things more complicated icon:external-link[]^] for client applications like the performance tool and how https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/#client-workaround-with-a-load-balancer[they can mitigate these issues icon:external-link[]^].
 
 [[performance-tool-sac]]
 === Single Active Consumer
 
-If the `--single-active-consumer` flag is set, the performance tool will create https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#single-active-consumer[single active consumer] instances.
+If the `--single-active-consumer` flag is set, the performance tool will create https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#single-active-consumer[single active consumer icon:external-link[]^] instances.
 This means that if there are more consumers than streams, there will be only one active consumer at a time on a stream, _if they share the same name_.
 Note <<performance-tool-offset-tracking, offset tracking>> gets enabled automatically if it's not with `--single-active-consumer` (using 10,000 for `--store-every`).
 Let's see a couple of examples.
@@ -167,8 +167,8 @@ java -jar stream-perf-test.jar --producers 2 --consumers 6 --stream-count 2 \
 
 === Super Streams
 
-The performance tool has a `--super-streams` flag to enable https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-streams[super streams] on the publisher and consumer sides.
-This support is meant to be used with the <<performance-tool-sac, `--single-active-consumer` flag>>, to https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-stream-sac[benefit from both features].
+The performance tool has a `--super-streams` flag to enable https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-streams[super streams icon:external-link[]^] on the publisher and consumer sides.
+This support is meant to be used with the <<performance-tool-sac, `--single-active-consumer` flag>>, to https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-stream-sac[benefit from both features icon:external-link[]^].
 We recommend reading the appropriate sections of the documentation to understand the semantics of the flags before using them.
 Let's see some examples.
 
@@ -181,7 +181,7 @@ java -jar stream-perf-test.jar --producers 1 --consumers 3 --single-active-consu
 
 The performance tool creates 3 individual streams by default, they are the partitions of the super stream.
 They are named `stream-0`, `stream-1`, and `stream-2`, after the name of the super stream, `stream`.
-The producer will publish to each of them, using a https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-stream-producer[hash-based routing strategy].
+The producer will publish to each of them, using a https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-stream-producer[hash-based routing strategy icon:external-link[]^].
 
 A consumer is _composite_ with `--super-streams`: it creates a consumer instance for each partition.
 This is 9 consumer instances overall – 3 composite consumers and 3 partitions – spread evenly across the partitions, but with only one active at a time on a given stream.
@@ -249,10 +249,10 @@ Both instances _must_ share the same `--id` if they want to communicate to synch
 The default synchronization timeout is 10 minutes.
 This can be changed with the `--instance-sync-timeout` flag, using a value in seconds.
 
-NOTE: Instance synchronization is compatible with https://perftest-dev.rabbitmq.com/#instance-synchronization[PerfTest], the AMQP 0.9.1 performance tool for RabbitMQ: instances of both tools can synchronize with each other.
+NOTE: Instance synchronization is compatible with https://perftest-dev.rabbitmq.com/#instance-synchronization[PerfTest icon:external-link[]^], the AMQP 0.9.1 performance tool for RabbitMQ: instances of both tools can synchronize with each other.
 The 2 tools use the same flags for this feature.
 
-Instance synchronization requires https://en.wikipedia.org/wiki/IP_multicast[IP multicast] to be available.
+Instance synchronization requires https://en.wikipedia.org/wiki/IP_multicast[IP multicast icon:external-link[]^] to be available.
 IP multicast is not necessary when the performance tool runs on Kubernetes pods.
 In this case, the tool asks Kubernetes for a list of pod IPs.
 The performance tool instances are expected to run in the same namespace, and the namespace must be available in the `MY_POD_NAMESPACE` environment variable or provided with the `--instance-sync-namespace` flag.
@@ -266,7 +266,7 @@ java -jar stream-perf-test.jar --id workload-1 --expected-instances 2 \
 
 NOTE: The performance tool needs permission to ask Kubernetes for a list of pod IPs.
 This is done by creating various policies e.g. with YAML.
-See the https://github.com/jgroups-extras/jgroups-kubernetes[Kubernetes discovery protocol for JGroups page] for more information.
+See the https://github.com/jgroups-extras/jgroups-kubernetes[Kubernetes discovery protocol for JGroups page icon:external-link[]^] for more information.
 
 === Using Environment Variables as Options
 

@@ -11,7 +11,7 @@ java -jar stream-perf-test.jar --uris rabbitmq-stream://rabbitmq-1:5552
 ----
 
 The URI follows the same rules as the
-https://www.rabbitmq.com/uri-spec.html[AMQP 0.9.1 URI],
+https://www.rabbitmq.com/uri-spec.html[AMQP 0.9.1 URI icon:external-link[]^],
 except the protocol must be `rabbitmq-stream`.
 The next command shows how to set up the different elements of the URI:
 
@@ -42,7 +42,7 @@ java -jar stream-perf-test.jar \
 Note the performance tool will automatically configure the client to trust all
 server certificates and to not use a private key (for client authentication).
 
-Have a look at the https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#understanding-connection-logic[connection logic section] of the stream Java client in case of connection problem.
+Have a look at the https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#understanding-connection-logic[connection logic section icon:external-link[]^] of the stream Java client in case of connection problem.
 
 === Publishing Rate
 
@@ -128,7 +128,7 @@ consumers if you want all the declared streams to be used.
 
 |`--stream-count 5 --streams stream-%d`
 |`stream-1,stream-2,stream-3,stream-4,stream-5`
-|Possible to specify a https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html[Java printf-style format string].
+|Possible to specify a https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html[Java printf-style format string icon:external-link[]^].
 
 |`--stream-count 10 --streams stream-%d`
 |`stream-1,stream-2,stream-3,..., stream-10`
@@ -191,7 +191,7 @@ java -jar stream-perf-test.jar --size 1024
 
 Note the message body size cannot be smaller that 8 bytes, as the performance tool stores
 a long in each message to calculate the latency. Note also the actual size of a message will be
-slightly higher, as the body is wrapped in an https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#working-with-complex-messages[AMQP 1.0 message].
+slightly higher, as the body is wrapped in an https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#working-with-complex-messages[AMQP 1.0 message icon:external-link[]^].
 
 [[performance-tool-connection-pooling]]
 === Connection Pooling
