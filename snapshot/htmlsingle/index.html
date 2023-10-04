@@ -528,7 +528,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <h1>RabbitMQ Stream PerfTest</h1>
 <div class="details">
 <span id="revnumber">version 0.1.0-SNAPSHOT</span>
-<br><span id="revremark">(95d7f34)</span>
+<br><span id="revremark">(6c02f9c)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -589,16 +589,16 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <h2 id="getting-started"><a class="anchor" href="#getting-started"></a>Getting Started</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Stream PerfTest is based on the <a href="https://github.com/rabbitmq/rabbitmq-stream-java-client/">stream Java client</a> and uses the <a href="https://github.com/rabbitmq/rabbitmq-server/blob/main/deps/rabbitmq_stream/docs/PROTOCOL.adoc">stream protocol</a> to communicate with a RabbitMQ cluster.
-Use <a href="https://perftest.rabbitmq.com">PerfTest</a> if you want to test streams or queues with <a href="https://www.rabbitmq.com/tutorials/amqp-concepts.html">AMQP 0.9.1</a>.</p>
+<p>Stream PerfTest is based on the <a href="https://github.com/rabbitmq/rabbitmq-stream-java-client/" target="_blank" rel="noopener">stream Java client <span class="icon"><i class="fa fa-external-link"></i></span></a> and uses the <a href="https://github.com/rabbitmq/rabbitmq-server/blob/main/deps/rabbitmq_stream/docs/PROTOCOL.adoc" target="_blank" rel="noopener">stream protocol <span class="icon"><i class="fa fa-external-link"></i></span></a> to communicate with a RabbitMQ cluster.
+Use <a href="https://perftest.rabbitmq.com" target="_blank" rel="noopener">PerfTest <span class="icon"><i class="fa fa-external-link"></i></span></a> if you want to test streams or queues with <a href="https://www.rabbitmq.com/tutorials/amqp-concepts.html" target="_blank" rel="noopener">AMQP 0.9.1 <span class="icon"><i class="fa fa-external-link"></i></span></a>.</p>
 </div>
 <div class="paragraph">
 <p>Stream PerfTest is usable as an uber JAR
-<a href="https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases">downloadable from GitHub Release</a> or as a <a href="https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test">Docker image</a>.
+<a href="https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases" target="_blank" rel="noopener">downloadable from GitHub Release <span class="icon"><i class="fa fa-external-link"></i></span></a> or as a <a href="https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test" target="_blank" rel="noopener">Docker image <span class="icon"><i class="fa fa-external-link"></i></span></a>.
 It can be built separately as well.</p>
 </div>
 <div class="paragraph">
-<p>Snapshots are on <a href="https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases">GitHub release</a> as well.
+<p>Snapshots are on <a href="https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases" target="_blank" rel="noopener">GitHub release <span class="icon"><i class="fa fa-external-link"></i></span></a> as well.
 Use the <code>pivotalrabbitmq/stream-perf-test:dev</code> image to use the latest snapshot in Docker.</p>
 </div>
 </div>
@@ -613,7 +613,7 @@ Use the <code>pivotalrabbitmq/stream-perf-test:dev</code> image to use the lates
 <h3 id="with-docker"><a class="anchor" href="#with-docker"></a>With Docker</h3>
 <div class="paragraph">
 <p>The performance tool is available as a
-<a href="https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test">Docker image</a>.
+<a href="https://hub.docker.com/r/pivotalrabbitmq/stream-perf-test" target="_blank" rel="noopener">Docker image <span class="icon"><i class="fa fa-external-link"></i></span></a>.
 You can use the Docker image to list the available options:</p>
 </div>
 <div class="listingblock">
@@ -627,7 +627,7 @@ You can use the Docker image to list the available options:</p>
 </div>
 <div class="paragraph">
 <p>When using Docker, the container running the performance tool must be able to connect to the broker, so you have to figure out the appropriate Docker configuration to make this possible.
-You can have a look at the <a href="https://docs.docker.com/network/">Docker network documentation</a> to find out more.</p>
+You can have a look at the <a href="https://docs.docker.com/network/" target="_blank" rel="noopener">Docker network documentation <span class="icon"><i class="fa fa-external-link"></i></span></a> to find out more.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -651,7 +651,7 @@ You can have a look at the <a href="https://docs.docker.com/network/">Docker net
 <h4 id="with-docker-host-network-driver"><a class="anchor" href="#with-docker-host-network-driver"></a>With Docker Host Network Driver</h4>
 <div class="paragraph">
 <p>This is the simplest way to run the image locally, with a local broker running in Docker as well.
-The containers use the <a href="https://docs.docker.com/network/host/">host network</a>,
+The containers use the <a href="https://docs.docker.com/network/host/" target="_blank" rel="noopener">host network <span class="icon"><i class="fa fa-external-link"></i></span></a>,
 this is perfect for experimenting locally.</p>
 </div>
 <div class="listingblock">
@@ -686,7 +686,7 @@ Nevertheless, the commands above work on some Mac hosts.</p>
 <h4 id="with-docker-bridge-network-driver"><a class="anchor" href="#with-docker-bridge-network-driver"></a>With Docker Bridge Network Driver</h4>
 <div class="paragraph">
 <p>Containers need to be able to communicate with each other with
-the <a href="https://docs.docker.com/network/bridge/">bridge network driver</a>, this
+the <a href="https://docs.docker.com/network/bridge/" target="_blank" rel="noopener">bridge network driver <span class="icon"><i class="fa fa-external-link"></i></span></a>, this
 can be done by defining a network and running the containers in this network.</p>
 </div>
 <div class="listingblock">
@@ -708,8 +708,8 @@ docker run -it --rm --network stream-perf-test pivotalrabbitmq/stream-perf-test 
 <div class="sect2">
 <h3 id="with-the-java-binary"><a class="anchor" href="#with-the-java-binary"></a>With the Java Binary</h3>
 <div class="paragraph">
-<p>The Java binary is available on <a href="https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases">GitHub Release</a>.
-<a href="https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases">Snapshots</a> are available as well. To use the latest snapshot:</p>
+<p>The Java binary is available on <a href="https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases" target="_blank" rel="noopener">GitHub Release <span class="icon"><i class="fa fa-external-link"></i></span></a>.
+<a href="https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases" target="_blank" rel="noopener">Snapshots <span class="icon"><i class="fa fa-external-link"></i></span></a> are available as well. To use the latest snapshot:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -756,7 +756,7 @@ detailed metrics in a <code>stream-perf-test-current.txt</code> file that get re
 </div>
 <div class="paragraph">
 <p>The performance tool comes also with a
-<a href="https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest_completion">completion script</a>.
+<a href="https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/download/v-stream-perf-test-latest/stream-perf-test-latest_completion" target="_blank" rel="noopener">completion script <span class="icon"><i class="fa fa-external-link"></i></span></a>.
 You can download it and enable it in your <code>~/.zshrc</code> file:</p>
 </div>
 <div class="listingblock">
@@ -789,7 +789,7 @@ This can be changed with the <code>--uris</code> option:</p>
 </div>
 <div class="paragraph">
 <p>The URI follows the same rules as the
-<a href="https://www.rabbitmq.com/uri-spec.html">AMQP 0.9.1 URI</a>,
+<a href="https://www.rabbitmq.com/uri-spec.html" target="_blank" rel="noopener">AMQP 0.9.1 URI <span class="icon"><i class="fa fa-external-link"></i></span></a>,
 except the protocol must be <code>rabbitmq-stream</code>.
 The next command shows how to set up the different elements of the URI:</p>
 </div>
@@ -828,7 +828,7 @@ to distribute publishers and consumers across a cluster.</p>
 server certificates and to not use a private key (for client authentication).</p>
 </div>
 <div class="paragraph">
-<p>Have a look at the <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#understanding-connection-logic">connection logic section</a> of the stream Java client in case of connection problem.</p>
+<p>Have a look at the <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#understanding-connection-logic" target="_blank" rel="noopener">connection logic section <span class="icon"><i class="fa fa-external-link"></i></span></a> of the stream Java client in case of connection problem.</p>
 </div>
 </div>
 <div class="sect2">
@@ -955,7 +955,7 @@ consumers if you want all the declared streams to be used.</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--stream-count 5 --streams stream-%d</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>stream-1,stream-2,stream-3,stream-4,stream-5</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Possible to specify a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html">Java printf-style format string</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Possible to specify a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html" target="_blank" rel="noopener">Java printf-style format string <span class="icon"><i class="fa fa-external-link"></i></span></a>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--stream-count 10 --streams stream-%d</code></p></td>
@@ -1035,7 +1035,7 @@ sets a size of 1 KB:</p>
 <div class="paragraph">
 <p>Note the message body size cannot be smaller that 8 bytes, as the performance tool stores
 a long in each message to calculate the latency. Note also the actual size of a message will be
-slightly higher, as the body is wrapped in an <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#working-with-complex-messages">AMQP 1.0 message</a>.</p>
+slightly higher, as the body is wrapped in an <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#working-with-complex-messages" target="_blank" rel="noopener">AMQP 1.0 message <span class="icon"><i class="fa fa-external-link"></i></span></a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1073,7 +1073,7 @@ As the rate is low, we can re-use connections:</p>
 <h3 id="performance-tool-retention"><a class="anchor" href="#performance-tool-retention"></a>Retention</h3>
 <div class="paragraph">
 <p>If you run performance tests for a long time, you might be interested in setting
-a <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#limiting-the-size-of-a-stream">retention strategy</a> for
+a <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#limiting-the-size-of-a-stream" target="_blank" rel="noopener">retention strategy <span class="icon"><i class="fa fa-external-link"></i></span></a> for
 the streams the performance tool creates for a run. This
 would typically avoid saturating the storage devices of your servers.
 The default values are 20 GB for the maximum size of a stream and
@@ -1104,14 +1104,14 @@ a maximum segment size of 250 MB:</p>
 </div>
 <div class="paragraph">
 <p>The <code>--max-age</code> option uses the
-<a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration format</a>.</p>
+<a href="https://en.wikipedia.org/wiki/ISO_8601#Durations" target="_blank" rel="noopener">ISO 8601 duration format <span class="icon"><i class="fa fa-external-link"></i></span></a>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="offset-consumer"><a class="anchor" href="#offset-consumer"></a>Offset (Consumer)</h3>
 <div class="paragraph">
 <p>Consumers start by default at the very end of a stream (offset <code>next</code>).
-It is possible to specify an <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#specifying-an-offset">offset</a>
+It is possible to specify an <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#specifying-an-offset" target="_blank" rel="noopener">offset <span class="icon"><i class="fa fa-external-link"></i></span></a>
 to start from with the <code>--offset</code> option,
 if you have existing streams, and you want to consume from them at a specific offset.
 The following command sets the consumer to start consuming at the beginning of
@@ -1131,7 +1131,7 @@ an unsigned long for a given offset, and an ISO 8601 formatted timestamp
 <div class="sect2">
 <h3 id="performance-tool-offset-tracking"><a class="anchor" href="#performance-tool-offset-tracking"></a>Offset Tracking (Consumer)</h3>
 <div class="paragraph">
-<p>A consumer can <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#consumer-offset-tracking">track the point</a> it has reached
+<p>A consumer can <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#consumer-offset-tracking" target="_blank" rel="noopener">track the point <span class="icon"><i class="fa fa-external-link"></i></span></a> it has reached
 in a stream to be able to restart where it left off in a new incarnation.
 The performance tool has the <code>--store-every</code> option to tell consumers to store
 the offset every <code>x</code> messages to be able to measure the impact of offset tracking
@@ -1147,13 +1147,13 @@ The following command shows how to store the offset every 100,000 messages:</p>
 <div class="sect2">
 <h3 id="consumer-names"><a class="anchor" href="#consumer-names"></a>Consumer Names</h3>
 <div class="paragraph">
-<p>When using <code>--store-every</code> (see above) for <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#consumer-offset-tracking">offset tracking</a>,
+<p>When using <code>--store-every</code> (see above) for <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#consumer-offset-tracking" target="_blank" rel="noopener">offset tracking <span class="icon"><i class="fa fa-external-link"></i></span></a>,
 the performance tool uses a default name using the pattern <code>{stream-name}-{consumer-number}</code>.
 So the default name of a single tracking consumer consuming from <code>stream</code> will be <code>stream-1</code>.</p>
 </div>
 <div class="paragraph">
 <p>The consumer names pattern can be set with the <code>--consumer-names</code> option, which uses
-the <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html">Java printf-style format string</a>.
+the <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html" target="_blank" rel="noopener">Java printf-style format string <span class="icon"><i class="fa fa-external-link"></i></span></a>.
 The stream name and the consumer number are injected as arguments, in this order.</p>
 </div>
 <div class="paragraph">
@@ -1193,7 +1193,7 @@ as the pattern uses the consumer number first, which is not the pre-defined orde
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>uuid</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>7cc75659-ea67-4874-96ef-151a505e1a55</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.oracle.com/javase/7/docs/api/java/util/UUID.html#randomUUID()">Random UUID</a> that
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://docs.oracle.com/javase/7/docs/api/java/util/UUID.html#randomUUID()" target="_blank" rel="noopener">Random UUID <span class="icon"><i class="fa fa-external-link"></i></span></a> that
 changes for every run.</p></td>
 </tr>
 </tbody>
@@ -1210,7 +1210,7 @@ tracking consumers would ignore the specified offset and would start where they 
 <h3 id="producer-names"><a class="anchor" href="#producer-names"></a>Producer Names</h3>
 <div class="paragraph">
 <p>You can use the <code>--producer-names</code> option to set the producer names pattern and therefore
-enable <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#outbound-message-deduplication">message deduplication</a> (using the default
+enable <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#outbound-message-deduplication" target="_blank" rel="noopener">message deduplication <span class="icon"><i class="fa fa-external-link"></i></span></a> (using the default
 publishing sequence starting at 0 and incremented for each message).
 The same naming options apply as above in <a href="#consumer-names">consumer names</a> with the only
 difference that the default pattern is empty (i.e. no deduplication).</p>
@@ -1231,7 +1231,7 @@ difference that the default pattern is empty (i.e. no deduplication).</p>
 <h3 id="load-balancer-in-front-of-the-cluster"><a class="anchor" href="#load-balancer-in-front-of-the-cluster"></a>Load Balancer in Front of the Cluster</h3>
 <div class="paragraph">
 <p>A load balancer can misguide the performance tool when it tries to connect to nodes that host stream leaders and replicas.
-The <a href="https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/">"Connecting to Streams"</a> blog post covers why client applications must connect to the appropriate nodes in a cluster.</p>
+The <a href="https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/">Connecting to Streams</a> blog post covers why client applications must connect to the appropriate nodes in a cluster.</p>
 </div>
 <div class="paragraph">
 <p>Use the <code>--load-balancer</code> flag to make sure the performance tool always goes through the load balancer that sits in front of your cluster:</p>
@@ -1243,13 +1243,13 @@ The <a href="https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/">"Co
 </div>
 </div>
 <div class="paragraph">
-<p>The same blog post covers why a <a href="https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/#with-a-load-balancer">load balancer can make things more complicated</a> for client applications like the performance tool and how <a href="https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/#client-workaround-with-a-load-balancer">they can mitigate these issues</a>.</p>
+<p>The same blog post covers why a <a href="https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/#with-a-load-balancer" target="_blank" rel="noopener">load balancer can make things more complicated <span class="icon"><i class="fa fa-external-link"></i></span></a> for client applications like the performance tool and how <a href="https://blog.rabbitmq.com/posts/2021/07/connecting-to-streams/#client-workaround-with-a-load-balancer" target="_blank" rel="noopener">they can mitigate these issues <span class="icon"><i class="fa fa-external-link"></i></span></a>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="performance-tool-sac"><a class="anchor" href="#performance-tool-sac"></a>Single Active Consumer</h3>
 <div class="paragraph">
-<p>If the <code>--single-active-consumer</code> flag is set, the performance tool will create <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#single-active-consumer">single active consumer</a> instances.
+<p>If the <code>--single-active-consumer</code> flag is set, the performance tool will create <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#single-active-consumer" target="_blank" rel="noopener">single active consumer <span class="icon"><i class="fa fa-external-link"></i></span></a> instances.
 This means that if there are more consumers than streams, there will be only one active consumer at a time on a stream, <em>if they share the same name</em>.
 Note <a href="#performance-tool-offset-tracking">offset tracking</a> gets enabled automatically if it&#8217;s not with <code>--single-active-consumer</code> (using 10,000 for <code>--store-every</code>).
 Let&#8217;s see a couple of examples.</p>
@@ -1281,8 +1281,8 @@ Note the consumers have the same name on their streams with the use of <code>--c
 <div class="sect2">
 <h3 id="super-streams"><a class="anchor" href="#super-streams"></a>Super Streams</h3>
 <div class="paragraph">
-<p>The performance tool has a <code>--super-streams</code> flag to enable <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-streams">super streams</a> on the publisher and consumer sides.
-This support is meant to be used with the <a href="#performance-tool-sac"><code>--single-active-consumer</code> flag</a>, to <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-stream-sac">benefit from both features</a>.
+<p>The performance tool has a <code>--super-streams</code> flag to enable <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-streams" target="_blank" rel="noopener">super streams <span class="icon"><i class="fa fa-external-link"></i></span></a> on the publisher and consumer sides.
+This support is meant to be used with the <a href="#performance-tool-sac"><code>--single-active-consumer</code> flag</a>, to <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-stream-sac" target="_blank" rel="noopener">benefit from both features <span class="icon"><i class="fa fa-external-link"></i></span></a>.
 We recommend reading the appropriate sections of the documentation to understand the semantics of the flags before using them.
 Let&#8217;s see some examples.</p>
 </div>
@@ -1298,7 +1298,7 @@ Let&#8217;s see some examples.</p>
 <div class="paragraph">
 <p>The performance tool creates 3 individual streams by default, they are the partitions of the super stream.
 They are named <code>stream-0</code>, <code>stream-1</code>, and <code>stream-2</code>, after the name of the super stream, <code>stream</code>.
-The producer will publish to each of them, using a <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-stream-producer">hash-based routing strategy</a>.</p>
+The producer will publish to each of them, using a <a href="https://rabbitmq.github.io/rabbitmq-stream-java-client/stable/htmlsingle/#super-stream-producer" target="_blank" rel="noopener">hash-based routing strategy <span class="icon"><i class="fa fa-external-link"></i></span></a>.</p>
 </div>
 <div class="paragraph">
 <p>A consumer is <em>composite</em> with <code>--super-streams</code>: it creates a consumer instance for each partition.
@@ -1407,14 +1407,14 @@ This can be changed with the <code>--instance-sync-timeout</code> flag, using a 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Instance synchronization is compatible with <a href="https://perftest-dev.rabbitmq.com/#instance-synchronization">PerfTest</a>, the AMQP 0.9.1 performance tool for RabbitMQ: instances of both tools can synchronize with each other.
+Instance synchronization is compatible with <a href="https://perftest-dev.rabbitmq.com/#instance-synchronization" target="_blank" rel="noopener">PerfTest <span class="icon"><i class="fa fa-external-link"></i></span></a>, the AMQP 0.9.1 performance tool for RabbitMQ: instances of both tools can synchronize with each other.
 The 2 tools use the same flags for this feature.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Instance synchronization requires <a href="https://en.wikipedia.org/wiki/IP_multicast">IP multicast</a> to be available.
+<p>Instance synchronization requires <a href="https://en.wikipedia.org/wiki/IP_multicast" target="_blank" rel="noopener">IP multicast <span class="icon"><i class="fa fa-external-link"></i></span></a> to be available.
 IP multicast is not necessary when the performance tool runs on Kubernetes pods.
 In this case, the tool asks Kubernetes for a list of pod IPs.
 The performance tool instances are expected to run in the same namespace, and the namespace must be available in the <code>MY_POD_NAMESPACE</code> environment variable or provided with the <code>--instance-sync-namespace</code> flag.
@@ -1436,7 +1436,7 @@ Here is an example of using instance synchronization on Kubernetes by providing 
 <td class="content">
 The performance tool needs permission to ask Kubernetes for a list of pod IPs.
 This is done by creating various policies e.g. with YAML.
-See the <a href="https://github.com/jgroups-extras/jgroups-kubernetes">Kubernetes discovery protocol for JGroups page</a> for more information.
+See the <a href="https://github.com/jgroups-extras/jgroups-kubernetes" target="_blank" rel="noopener">Kubernetes discovery protocol for JGroups page <span class="icon"><i class="fa fa-external-link"></i></span></a> for more information.
 </td>
 </tr>
 </table>
@@ -1543,7 +1543,7 @@ Use the <code>rabbitmq.streamperftest.loggers</code> system property with <code>
 <div id="footer">
 <div id="footer-text">
 Version 0.1.0-SNAPSHOT<br>
-Last updated 2023-10-03 13:55:30 UTC
+Last updated 2023-10-04 08:03:03 UTC
 </div>
 </div>
 </body>
