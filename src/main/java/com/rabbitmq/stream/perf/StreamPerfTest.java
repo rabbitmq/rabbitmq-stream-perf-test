@@ -430,6 +430,13 @@ public class StreamPerfTest implements Callable<Integer> {
   private List<String> filterValues;
 
   @CommandLine.Option(
+      names = {"--filter-size", "-fs"},
+      description = "filter size, between 16 and 255",
+      defaultValue = "16",
+      converter = Utils.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
+  private int filterSize;
+
+  @CommandLine.Option(
       names = {"--force-replica-for-consumers", "-frfc"},
       description = "force the connection to a replica for consumers",
       defaultValue = "false")
@@ -1226,6 +1233,7 @@ public class StreamPerfTest implements Callable<Integer> {
     StreamCreator streamCreator =
         environment.streamCreator().stream(stream)
             .maxSegmentSizeBytes(this.maxSegmentSize)
+            .filterSize(this.filterSize)
             .leaderLocator(this.leaderLocator);
 
     if (this.maxLengthBytes.toBytes() != 0) {
