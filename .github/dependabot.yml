@@ -9,7 +9,7 @@ updates:
     open-pull-requests-limit: 20
     ignore:
       - dependency-name: "org.springframework.boot:spring-boot-maven-plugin"
-        versions: ["[2.7,)"]
+        versions: ["[,3.0]"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
