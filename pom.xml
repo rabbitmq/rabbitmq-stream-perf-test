@@ -459,18 +459,18 @@
 
   </profiles>
 
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>sonatype</id>
-      <name>Sonatype Maven 2 Snapshot Repository</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-  </repositories>
+  <!-- <repositories> -->
+  <!--   <repository> -->
+  <!--     <releases> -->
+  <!--       <enabled>false</enabled> -->
+  <!--     </releases> -->
+  <!--     <snapshots> -->
+  <!--       <enabled>true</enabled> -->
+  <!--     </snapshots> -->
+  <!--     <id>sonatype</id> -->
+  <!--     <name>Sonatype Maven 2 Snapshot Repository</name> -->
+  <!--     <url>https://oss.sonatype.org/content/repositories/snapshots/</url> -->
+  <!--   </repository> -->
+  <!-- </repositories> -->
 
 </project>
