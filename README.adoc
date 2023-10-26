@@ -21,7 +21,7 @@ The https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/tag/v-
 
 == Documentation
 
-// * https://rabbitmq.github.io/rabbitmq-stream-perf-test/stable/htmlsingle/[Latest stable release]
+* https://rabbitmq.github.io/rabbitmq-stream-perf-test/stable/htmlsingle/[Latest stable release]
 * https://rabbitmq.github.io/rabbitmq-stream-perf-test/snapshot/htmlsingle/[Latest development build]
 
 == Usage
