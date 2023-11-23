@@ -63,7 +63,7 @@
     <commons-codec.version>1.16.0</commons-codec.version>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
     <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-    <spring-boot-maven-plugin.version>2.7.17</spring-boot-maven-plugin.version>
+    <spring-boot-maven-plugin.version>2.7.18</spring-boot-maven-plugin.version>
     <checksum.maven.plugin.version>1.11</checksum.maven.plugin.version>
     <maven.gpg.plugin.version>3.1.0</maven.gpg.plugin.version>
     <buildnumber.plugin.version>3.2.0</buildnumber.plugin.version>
