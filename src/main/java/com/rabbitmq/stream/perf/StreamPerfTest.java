@@ -1208,7 +1208,10 @@ public class StreamPerfTest implements Callable<Integer> {
         consumerBuilder =
             consumerBuilder
                 .filter()
-                .postFilter(msg -> filterValue.equals(msg.getProperties().getTo()))
+                .postFilter(msg -> {
+                    String value = msg.getProperties() == null ? null : msg.getProperties().getTo();
+                    return filterValue.equals(value);
+                })
                 .builder();
       } else {
         consumerBuilder =
