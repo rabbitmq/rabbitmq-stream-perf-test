@@ -35,6 +35,7 @@ jobs:
           tag_name: ${{ env.tag_name }}
           target_commitish: ${{ env.release_branch }}
           prerelease: true
+          draft: false
           token: ${{ secrets.CI_GITHUB_TOKEN }}
           repository: rabbitmq/rabbitmq-java-tools-binaries-dev
       - name: Delete latest release
@@ -52,6 +53,7 @@ jobs:
           tag_name: v-stream-perf-test-latest
           target_commitish: main
           prerelease: true
+          draft: false
           token: ${{ secrets.CI_GITHUB_TOKEN }}
           repository: rabbitmq/rabbitmq-java-tools-binaries-dev
       - name: Trigger Stream Perf Test Docker image build
