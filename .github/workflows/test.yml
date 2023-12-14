@@ -72,7 +72,7 @@ jobs:
           files: packages-latest/*
           name: stream-perf-test-latest
           tag_name: v-stream-perf-test-latest
-          target_commitish: ${{ env.release_branch }}
+          target_commitish: main
           prerelease: true
           draft: false
           token: ${{ secrets.CI_GITHUB_TOKEN }}
