@@ -26,7 +26,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: ${{ matrix.distribution }} 
+          distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.version }}
           cache: 'maven'
       - name: Start broker
