@@ -24,6 +24,13 @@ The https://github.com/rabbitmq/rabbitmq-java-tools-binaries-dev/releases/tag/v-
 * https://rabbitmq.github.io/rabbitmq-stream-perf-test/stable/htmlsingle/[Latest stable release]
 * https://rabbitmq.github.io/rabbitmq-stream-perf-test/snapshot/htmlsingle/[Latest development build]
 
+== Support
+
+* For questions: https://groups.google.com/forum/#!forum/rabbitmq-users[RabbitMQ Users]
+* For bugs and feature requests: https://github.com/rabbitmq/rabbitmq-stream-perf-test/issues[GitHub Issues]
+
+See the https://www.rabbitmq.com/java-versions.html[RabbitMQ Java libraries support page] for the support timeline of this tool.
+
 == Usage
 
 Download the latest snapshot:
