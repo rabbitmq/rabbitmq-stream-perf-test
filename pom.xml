@@ -73,7 +73,7 @@
     <asciidoctor.maven.plugin.version>2.2.5</asciidoctor.maven.plugin.version>
     <asciidoctorj.version>2.5.11</asciidoctorj.version>
     <asciidoctorj.diagram.version>2.2.14</asciidoctorj.diagram.version>
-    <spotless.version>2.41.1</spotless.version>
+    <spotless.version>2.42.0</spotless.version>
     <google-java-format.version>1.17.0</google-java-format.version>
     <!-- for documentation -->
     <broker.version>3.12</broker.version>
