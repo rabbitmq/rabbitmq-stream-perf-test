@@ -1,4 +1,5 @@
-// Copyright (c) 2020-2023 Broadcom. All Rights Reserved. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+// Copyright (c) 2020-2023 Broadcom. All Rights Reserved. The term "Broadcom" refers to Broadcom
+// Inc. and/or its subsidiaries.
 //
 // This software, the RabbitMQ Stream Performance Testing Tool, is dual-licensed under the
 // Mozilla Public License 2.0 ("MPL"), and the Apache License version 2 ("ASL").
@@ -1208,10 +1209,12 @@ public class StreamPerfTest implements Callable<Integer> {
         consumerBuilder =
             consumerBuilder
                 .filter()
-                .postFilter(msg -> {
-                    String value = msg.getProperties() == null ? null : msg.getProperties().getTo();
-                    return filterValue.equals(value);
-                })
+                .postFilter(
+                    msg -> {
+                      String value =
+                          msg.getProperties() == null ? null : msg.getProperties().getTo();
+                      return filterValue.equals(value);
+                    })
                 .builder();
       } else {
         consumerBuilder =
