@@ -74,7 +74,7 @@
     <asciidoctorj.version>2.5.11</asciidoctorj.version>
     <asciidoctorj.diagram.version>2.2.14</asciidoctorj.diagram.version>
     <spotless.version>2.43.0</spotless.version>
-    <google-java-format.version>1.17.0</google-java-format.version>
+    <google-java-format.version>1.19.2</google-java-format.version>
     <!-- for documentation -->
     <broker.version>3.12</broker.version>
     <!-- to sign artifacts when releasing -->
