@@ -36,7 +36,7 @@ jobs:
           prerelease: ${{ env.prerelease }}
           repository: rabbitmq/rabbitmq-stream-perf-test
       - name: Trigger Stream Perf Test Docker image build
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
           event-type: new_release
           client-payload: >-
