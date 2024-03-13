@@ -28,7 +28,7 @@ jobs:
           tag-filter: '^v-stream-perf-test-1.[0-9]+.0-SNAPSHOT-[0-9]{8}-[0-9]{6}$'
           keep-last-n: 2
       - name: Push to GitHub Release
-        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
+        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564
         with:
           files: packages/*
           name: ${{ env.release_name }}
@@ -49,7 +49,7 @@ jobs:
         run: |
           sleep 5s
       - name: Push to GitHub Release
-        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
+        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564
         with:
           files: packages-latest/*
           name: stream-perf-test-latest
