@@ -419,7 +419,7 @@ public class StreamPerfTestTest {
         () -> {
           HttpResponse response = httpRequest("http://localhost:" + monitoringPort + "/metrics");
           return response.responseCode == 200
-              && response.body.contains("{datacenter=\"eu\",env=\"performance\",}");
+              && response.body.contains("{datacenter=\"eu\",env=\"performance\"}");
         });
     run.cancel(true);
     waitRunEnds();
