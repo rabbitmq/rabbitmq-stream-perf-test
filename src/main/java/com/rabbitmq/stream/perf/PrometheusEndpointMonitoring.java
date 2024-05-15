@@ -14,8 +14,8 @@
 // info@rabbitmq.com.
 package com.rabbitmq.stream.perf;
 
-import io.micrometer.prometheus.PrometheusConfig;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
+import io.micrometer.prometheusmetrics.PrometheusConfig;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import picocli.CommandLine.Option;
