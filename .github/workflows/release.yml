@@ -35,16 +35,35 @@ jobs:
           target_commitish: ${{ env.release_branch }}
           prerelease: ${{ env.prerelease }}
           repository: rabbitmq/rabbitmq-stream-perf-test
-      - name: Trigger Stream Perf Test Docker image build
-        uses: peter-evans/repository-dispatch@v3
+#      - name: Trigger Stream Perf Test Docker image build
+#        uses: peter-evans/repository-dispatch@v3
+#        with:
+#          event-type: new_release
+#          client-payload: >-
+#            {"version": "${{ env.release_version }}",
+#            "url" : "https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases/download/v${{ env.release_version }}/stream-perf-test-${{ env.release_version }}.jar",
+#            "tags": "pivotalrabbitmq/stream-perf-test:latest,pivotalrabbitmq/stream-perf-test:${{ env.release_version }}"}
+      - name: Checkout tls-gen
+        uses: actions/checkout@v4
         with:
-          event-type: new_release
-          client-payload: >-
-            {"version": "${{ env.release_version }}",
-            "url" : "https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases/download/v${{ env.release_version }}/stream-perf-test-${{ env.release_version }}.jar",
-            "tags": "pivotalrabbitmq/stream-perf-test:latest,pivotalrabbitmq/stream-perf-test:${{ env.release_version }}"}
-      - name: Publish Documentation
+          repository: rabbitmq/tls-gen
+          path: './tls-gen'
+      - name: Start broker
+        run: ci/start-broker.sh
+      - name: Set up JDK for sanity check and documentation generation
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+      - name: Sanity Check
         run: |
-          git config user.name "rabbitmq-ci"
-          git config user.email "rabbitmq-ci@users.noreply.github.com"
-          ci/publish-documentation-to-github-pages.sh
+          wget -O stream-perf-test.jar https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases/download/v${{ env.release_version }}/stream-perf-test-${{ env.release_version }}.jar
+          java -jar stream-perf-test.jar --rate 100 --prometheus --time 10
+      - name: Stop broker
+        run: docker stop rabbitmq && docker rm rabbitmq
+#      - name: Publish Documentation
+#        run: |
+#          git config user.name "rabbitmq-ci"
+#          git config user.email "rabbitmq-ci@users.noreply.github.com"
+#          ci/publish-documentation-to-github-pages.sh
