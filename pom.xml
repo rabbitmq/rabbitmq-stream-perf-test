@@ -406,6 +406,9 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${spring-boot-maven-plugin.version}</version>
+        <configuration>
+          <excludeGroupIds>com.github.spotbugs</excludeGroupIds>
+        </configuration>
         <executions>
           <execution>
             <goals>
