@@ -64,7 +64,8 @@ class DefaultInstanceSynchronization implements InstanceSynchronization {
 
   static String processConfigurationFile(InputStream configuration, String namespace)
       throws IOException {
-    BufferedReader in = new BufferedReader(new InputStreamReader(configuration));
+    BufferedReader in =
+        new BufferedReader(new InputStreamReader(configuration, StandardCharsets.UTF_8));
     final int bufferSize = 1024;
     final char[] buffer = new char[bufferSize];
     StringBuilder builder = new StringBuilder();
@@ -92,14 +93,14 @@ class DefaultInstanceSynchronization implements InstanceSynchronization {
     public void synchronize() {}
   }
 
-  private static class JGroupsInstanceSynchronization implements InstanceSynchronization {
+  private static final class JGroupsInstanceSynchronization implements InstanceSynchronization {
 
     private final String id;
     private final int expectedInstances;
     private final Duration timeout;
     private final JChannel channel;
     private final PrintWriter out;
-    private Set<Runnable> listeners = Collections.synchronizedSet(new LinkedHashSet<>());
+    private final Set<Runnable> listeners = Collections.synchronizedSet(new LinkedHashSet<>());
     private final boolean multicast;
 
     private JGroupsInstanceSynchronization(

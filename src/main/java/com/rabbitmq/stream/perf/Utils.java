@@ -385,10 +385,7 @@ class Utils {
             socket -> {
               if (socket instanceof SSLSocket) {
                 SSLSocket sslSocket = (SSLSocket) socket;
-                SSLParameters sslParameters =
-                    sslSocket.getSSLParameters() == null
-                        ? new SSLParameters()
-                        : sslSocket.getSSLParameters();
+                SSLParameters sslParameters = sslSocket.getSSLParameters();
                 sslParameters.setServerNames(sniServerNames);
                 sslSocket.setSSLParameters(sslParameters);
               } else {
@@ -754,16 +751,12 @@ class Utils {
 
     @Override
     public Integer convert(String input) {
-      try {
-        Integer value = Integer.valueOf(input);
-        if (value < this.min || value > this.max) {
-          throw new IllegalArgumentException();
-        }
-        return value;
-      } catch (Exception e) {
+      int value = Integer.parseInt(input);
+      if (value < this.min || value > this.max) {
         throw new CommandLine.TypeConversionException(
             input + " must an integer between " + this.min + " and " + this.max);
       }
+      return value;
     }
   }
 
@@ -895,7 +888,7 @@ class Utils {
             io.micrometer.core.instrument.Clock.SYSTEM) {
           @Override
           protected Double nullGaugeValue() {
-            return null;
+            return Double.NaN;
           }
         };
     return dropwizardMeterRegistry;

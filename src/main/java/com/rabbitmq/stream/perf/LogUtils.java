@@ -83,7 +83,8 @@ class LogUtils {
       }
     }
 
-    BufferedReader in = new BufferedReader(new InputStreamReader(configurationFile));
+    BufferedReader in =
+        new BufferedReader(new InputStreamReader(configurationFile, StandardCharsets.UTF_8));
     final int bufferSize = 1024;
     final char[] buffer = new char[bufferSize];
     StringBuilder builder = new StringBuilder();

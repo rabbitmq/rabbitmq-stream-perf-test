@@ -23,6 +23,7 @@ import io.micrometer.core.instrument.distribution.HistogramSupport;
 import io.micrometer.core.instrument.distribution.ValueAtPercentile;
 import io.micrometer.core.instrument.dropwizard.DropwizardMeterRegistry;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -183,8 +184,7 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
     Function<HistogramSupport, String> formatChunkSize =
         histogram -> String.format("chunk size %.0f", histogram.takeSnapshot().mean());
 
-    Function<Number, Number> convertDuration =
-        in -> in instanceof Long ? in.longValue() / 1_000_000 : in.doubleValue() / 1_000_000;
+    Function<Number, Number> convertDuration = in -> in.doubleValue() / 1_000_000.0;
     BiFunction<String, Timer, String> formatLatency =
         (name, timer) -> {
           HistogramSnapshot snapshot = timer.takeSnapshot();
@@ -264,13 +264,13 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
               entry -> {
                 if (entry.getKey().contains("bytes")) {
                   return formatByteRate(
-                          entry.getKey(),
-                          1000 * (long) entry.getValue().count() / duration.toMillis())
+                          entry.getKey(), 1000 * entry.getValue().count() / duration.toMillis())
                       + ", ";
                 } else {
                   return String.format(
                       "%s %d msg/s, ",
-                      entry.getKey(), 1000 * (long) entry.getValue().count() / duration.toMillis());
+                      entry.getKey(),
+                      (long) (1000 * entry.getValue().count() / duration.toMillis()));
                 }
               };
 
@@ -325,7 +325,7 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
         }
       }
       OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(currentFilename));
-      PrintStream printStream = new PrintStream(outputStream);
+      PrintStream printStream = new PrintStream(outputStream, false, StandardCharsets.UTF_8);
       if (description != null && !description.trim().isEmpty()) {
         printStream.println(description);
       }

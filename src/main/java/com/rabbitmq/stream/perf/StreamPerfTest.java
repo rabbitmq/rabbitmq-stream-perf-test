@@ -18,6 +18,7 @@ import static com.rabbitmq.stream.perf.Utils.ENVIRONMENT_VARIABLE_LOOKUP;
 import static com.rabbitmq.stream.perf.Utils.ENVIRONMENT_VARIABLE_PREFIX;
 import static com.rabbitmq.stream.perf.Utils.OPTION_TO_ENVIRONMENT_VARIABLE;
 import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Duration.ofMillis;
 
 import com.google.common.util.concurrent.RateLimiter;
@@ -35,6 +36,7 @@ import com.rabbitmq.stream.metrics.MetricsCollector;
 import com.rabbitmq.stream.perf.ShutdownService.CloseCallback;
 import com.rabbitmq.stream.perf.Utils.NamedThreadFactory;
 import com.rabbitmq.stream.perf.Utils.PerformanceMicrometerMetricsCollector;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.Tag;
@@ -518,6 +520,7 @@ public class StreamPerfTest implements Callable<Integer> {
   private volatile EventLoopGroup eventLoopGroup;
 
   // constructor for completion script generation
+  @SuppressFBWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
   public StreamPerfTest() {
     this(null, null, null, null);
   }
@@ -527,15 +530,15 @@ public class StreamPerfTest implements Callable<Integer> {
       PrintStream consoleOut,
       PrintStream consoleErr,
       AddressResolver addressResolver) {
-    this.arguments = arguments;
+    this.arguments = Arrays.copyOf(arguments, arguments.length);
     if (consoleOut == null) {
       consoleOut = System.out;
     }
     if (consoleErr == null) {
       consoleErr = System.err;
     }
-    this.out = new PrintWriter(consoleOut, true);
-    this.err = new PrintWriter(consoleErr, true);
+    this.out = new PrintWriter(consoleOut, true, UTF_8);
+    this.err = new PrintWriter(consoleErr, true, UTF_8);
     this.addressResolver = addressResolver;
   }
 
@@ -1179,11 +1182,12 @@ public class StreamPerfTest implements Callable<Integer> {
 
       CountDownLatch latch = new CountDownLatch(1);
 
-      Thread shutdownHook = new Thread(() -> latch.countDown());
+      Thread shutdownHook = new Thread(latch::countDown);
       Runtime.getRuntime().addShutdownHook(shutdownHook);
       try {
         if (isRunTimeLimited()) {
-          latch.await(this.time, TimeUnit.SECONDS);
+          boolean completed = latch.await(this.time, TimeUnit.SECONDS);
+          LOGGER.debug("Completion latch reached 0: {}", completed);
         } else {
           latch.await();
         }
@@ -1288,6 +1292,7 @@ public class StreamPerfTest implements Callable<Integer> {
         });
   }
 
+  @SuppressFBWarnings("DM_EXIT")
   private void maybeDisplayEnvironmentVariablesHelp() {
     if (this.environmentVariables) {
       Collection<Object> commands = new ArrayList<>(this.monitorings.size() + 1);
@@ -1300,6 +1305,7 @@ public class StreamPerfTest implements Callable<Integer> {
     }
   }
 
+  @SuppressFBWarnings("DM_EXIT")
   private void maybeDisplayVersion() {
     if (this.version) {
       versionInformation(this.out);
@@ -1336,7 +1342,7 @@ public class StreamPerfTest implements Callable<Integer> {
   }
 
   public void monitorings(List<Monitoring> monitorings) {
-    this.monitorings = monitorings;
+    this.monitorings = new ArrayList<>(monitorings);
   }
 
   static class RunContext {

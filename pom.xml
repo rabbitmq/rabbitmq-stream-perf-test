@@ -76,6 +76,8 @@
     <asciidoctorj.diagram.version>2.3.0</asciidoctorj.diagram.version>
     <spotless.version>2.43.0</spotless.version>
     <google-java-format.version>1.21.0</google-java-format.version>
+    <spotbugs-maven-plugin.version>4.8.5.0</spotbugs-maven-plugin.version>
+    <spotbugs.version>4.8.5</spotbugs.version>
     <!-- for documentation -->
     <broker.version>3.12</broker.version>
     <!-- to sign artifacts when releasing -->
@@ -189,6 +191,13 @@
       <artifactId>assertj-core</artifactId>
       <version>${assertj.version}</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <version>${spotbugs.version}</version>
+      <scope>provided</scope>
     </dependency>
 
   </dependencies>
@@ -439,6 +448,26 @@
                 <algorithm>SHA-256</algorithm>
               </algorithms>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>${spotbugs.version}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
