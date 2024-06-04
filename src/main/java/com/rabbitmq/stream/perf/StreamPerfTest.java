@@ -46,6 +46,7 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufAllocatorMetric;
 import io.netty.buffer.ByteBufAllocatorMetricProvider;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
@@ -513,6 +514,27 @@ public class StreamPerfTest implements Callable<Integer> {
       converter = Utils.BackOffDelayPolicyTypeConverter.class)
   private BackOffDelayPolicy topologyBackOffDelayPolicy;
 
+  @CommandLine.Option(
+      names = {"--tcp-send-buffer-size", "-tsbs"},
+      description = "TCP SO_SNDBUF option, default is platform value.",
+      defaultValue = "0",
+      converter = Utils.ByteCapacityTypeConverter.class)
+  private ByteCapacity tcpSndBuff;
+
+  @CommandLine.Option(
+      names = {"--tcp-receive-buffer-size", "-trbs"},
+      description = "TCP SO_RCVBUF option, default is platform value.",
+      defaultValue = "0",
+      converter = Utils.ByteCapacityTypeConverter.class)
+  private ByteCapacity tcpRcvBuff;
+
+  @CommandLine.Option(
+      names = {"--tcp-no-delay", "-tnd"},
+      description = "TCP NODELAY",
+      arity = "1",
+      defaultValue = "true")
+  private boolean tcpNoDelay;
+
   private MetricsCollector metricsCollector;
   private PerformanceMetrics performanceMetrics;
   private List<Monitoring> monitorings;
@@ -763,6 +785,18 @@ public class StreamPerfTest implements Callable<Integer> {
         this.eventLoopGroup = new NioEventLoopGroup();
         bootstrapCustomizer = b -> {};
       }
+
+      bootstrapCustomizer =
+          bootstrapCustomizer.andThen(
+              b -> {
+                if (this.tcpSndBuff.toBytes() > 0) {
+                  b.option(ChannelOption.SO_SNDBUF, (int) this.tcpSndBuff.toBytes());
+                }
+                if (this.tcpRcvBuff.toBytes() > 0) {
+                  b.option(ChannelOption.SO_RCVBUF, (int) this.tcpRcvBuff.toBytes());
+                }
+                b.option(ChannelOption.TCP_NODELAY, this.tcpNoDelay);
+              });
 
       EnvironmentBuilder environmentBuilder =
           Environment.builder()
