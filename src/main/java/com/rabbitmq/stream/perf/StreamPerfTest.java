@@ -1004,41 +1004,30 @@ public class StreamPerfTest implements Callable<Integer> {
                             .maxUnconfirmedMessages(this.confirms)
                             .build();
 
-                    ConfirmationHandler confirmationHandler;
+                    java.util.function.Consumer<Message> latencyCallback;
                     if (this.confirmLatency) {
-                      AtomicLong messageCount = new AtomicLong(0);
                       final PerformanceMetrics metrics = this.performanceMetrics;
-                      final int divisor = Utils.downSamplingDivisor(this.rate);
-                      confirmationHandler =
-                          confirmationStatus -> {
-                            if (confirmationStatus.isConfirmed()) {
-                              producerConfirm.increment();
-                              // at very high throughput ( > 1 M / s), the histogram can
-                              // become a bottleneck,
-                              // so we downsample and calculate latency for every x message
-                              // this should not affect the metric much
-                              if (messageCount.incrementAndGet() % divisor == 0) {
-                                try {
-                                  long time =
-                                      Utils.readLong(
-                                          confirmationStatus.getMessage().getBodyAsBinary());
-                                  // see below why we use current time to measure latency
-                                  metrics.confirmLatency(
-                                      System.currentTimeMillis() - time, TimeUnit.MILLISECONDS);
-                                } catch (Exception e) {
-                                  // not able to read the body, something wrong?
-                                }
-                              }
+                      latencyCallback =
+                          msg -> {
+                            try {
+                              long time = Utils.readLong(msg.getBodyAsBinary());
+                              // see below why we use current time to measure latency
+                              metrics.confirmLatency(
+                                  System.currentTimeMillis() - time, TimeUnit.MILLISECONDS);
+                            } catch (Exception e) {
+                              // not able to read the body, something wrong?
                             }
                           };
                     } else {
-                      confirmationHandler =
-                          confirmationStatus -> {
-                            if (confirmationStatus.isConfirmed()) {
-                              producerConfirm.increment();
-                            }
-                          };
+                      latencyCallback = msg -> {};
                     }
+                    ConfirmationHandler confirmationHandler =
+                        confirmationStatus -> {
+                          if (confirmationStatus.isConfirmed()) {
+                            producerConfirm.increment();
+                            latencyCallback.accept(confirmationStatus.getMessage());
+                          }
+                        };
 
                     producers.add(producer);
 
@@ -1047,7 +1036,6 @@ public class StreamPerfTest implements Callable<Integer> {
                     return (Runnable)
                         () -> {
                           final int msgSize = this.messageSize;
-
                           try {
                             while (!Thread.currentThread().isInterrupted()) {
                               rateLimiterCallback.run();
@@ -1100,7 +1088,6 @@ public class StreamPerfTest implements Callable<Integer> {
                       i -> {
                         final PerformanceMetrics metrics = this.performanceMetrics;
 
-                        AtomicLong messageCount = new AtomicLong(0);
                         String stream = stream(streams, i);
                         ConsumerBuilder consumerBuilder =
                             environment
@@ -1134,28 +1121,19 @@ public class StreamPerfTest implements Callable<Integer> {
                                   .builder();
                         }
 
-                        // we assume the publishing rate is the same order as the consuming rate
-                        // we actually don't want to downsample for low rates
-                        final int divisor = Utils.downSamplingDivisor(this.rate);
                         consumerBuilder =
                             consumerBuilder.messageHandler(
                                 (context, message) -> {
-                                  // at very high throughput ( > 1 M / s), the histogram can
-                                  // become a bottleneck,
-                                  // so we downsample and calculate latency for every x message
-                                  // this should not affect the metric much
-                                  if (messageCount.incrementAndGet() % divisor == 0) {
-                                    try {
-                                      long time = Utils.readLong(message.getBodyAsBinary());
-                                      // see above why we use current time to measure latency
-                                      metrics.latency(
-                                          System.currentTimeMillis() - time, TimeUnit.MILLISECONDS);
-                                    } catch (Exception e) {
-                                      // not able to read the body, maybe not a message from the
-                                      // tool
-                                    }
-                                    metrics.offset(context.offset());
+                                  try {
+                                    long time = Utils.readLong(message.getBodyAsBinary());
+                                    // see above why we use current time to measure latency
+                                    metrics.latency(
+                                        System.currentTimeMillis() - time, TimeUnit.MILLISECONDS);
+                                  } catch (Exception e) {
+                                    // not able to read the body, maybe not a message from the
+                                    // tool
                                   }
+                                  metrics.offset(context.offset());
                                 });
 
                         consumerBuilder = maybeConfigureForFiltering(consumerBuilder);

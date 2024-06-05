@@ -61,6 +61,12 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
   private volatile long lastPublishedCount = 0;
   private volatile long lastConsumedCount = 0;
   private volatile long offset;
+  private final AtomicLong lastConsumedRate = new AtomicLong(0);
+  private final AtomicLong latencyCallCount = new AtomicLong(0);
+  private final AtomicLong lastConfirmedRate = new AtomicLong(0);
+  private final AtomicLong confirmLatencyCallCount = new AtomicLong(0);
+  private static final int LATENCY_RECORDING_RATE_LIMIT = 100_000;
+  private static final int LATENCY_DOWNSAMPLING = 100;
 
   DefaultPerformanceMetrics(
       CompositeMeterRegistry meterRegistry,
@@ -135,6 +141,10 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
     countersNamesAndLabels.put(metricPublished, "published");
     countersNamesAndLabels.put(metricProducerConfirmed, "confirmed");
     countersNamesAndLabels.put(metricConsumed, "consumed");
+    Map<String, AtomicLong> rates = new HashMap<>();
+    rates.put("published", new AtomicLong(0));
+    rates.put("confirmed", this.lastConfirmedRate);
+    rates.put("consumed", this.lastConsumedRate);
 
     if (this.includeByteRates) {
       allMetrics.add(metricWrittenBytes);
@@ -164,6 +174,7 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
                   entry.getValue(),
                   (lastValue, currentValue, duration) -> {
                     long rate = 1000 * (currentValue - lastValue) / duration.toMillis();
+                    rates.get(entry.getValue()).set(rate);
                     return String.format("%s %d msg/s, ", entry.getValue(), rate);
                   });
             });
@@ -386,12 +397,22 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
 
   @Override
   public void latency(long latency, TimeUnit unit) {
-    this.latency.record(latency, unit);
+    long count = this.latencyCallCount.incrementAndGet();
+    if (this.lastConsumedRate.get() < LATENCY_RECORDING_RATE_LIMIT) {
+      this.latency.record(latency, unit);
+    } else if (count % LATENCY_DOWNSAMPLING == 0) {
+      this.latency.record(latency, unit);
+    }
   }
 
   @Override
   public void confirmLatency(long latency, TimeUnit unit) {
-    this.confirmLatency.record(latency, unit);
+    long count = this.confirmLatencyCallCount.incrementAndGet();
+    if (this.lastConfirmedRate.get() < LATENCY_RECORDING_RATE_LIMIT) {
+      this.confirmLatency.record(latency, unit);
+    } else if (count % LATENCY_DOWNSAMPLING == 0) {
+      this.confirmLatency.record(latency, unit);
+    }
   }
 
   @Override

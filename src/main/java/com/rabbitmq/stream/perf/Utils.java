@@ -308,17 +308,6 @@ class Utils {
     return spec;
   }
 
-  static int downSamplingDivisor(int rate) {
-    int divisor;
-    if (rate > 0) {
-      divisor = rate > 100 ? 100 : 1; // no downsampling for small rates
-    } else {
-      // no rate limitation, downsampling
-      divisor = 100;
-    }
-    return divisor;
-  }
-
   static void declareSuperStreamExchangeAndBindings(
       Channel channel, String superStream, List<String> streams) throws Exception {
     channel.exchangeDeclare(

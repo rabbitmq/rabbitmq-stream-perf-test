@@ -317,16 +317,6 @@ public class UtilsTest {
 
   @ParameterizedTest
   @CsvSource({
-    "0,100",
-    "50,1",
-    "1000,100",
-  })
-  void testDownSamplingDivisor(int rate, int expected) {
-    assertThat(Utils.downSamplingDivisor(rate)).isEqualTo(expected);
-  }
-
-  @ParameterizedTest
-  @CsvSource({
     "--uris,URIS",
     "--stream-count,STREAM_COUNT",
     "-sc,SC",
