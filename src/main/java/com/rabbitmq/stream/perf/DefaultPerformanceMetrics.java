@@ -116,7 +116,7 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
     long startTime = System.nanoTime();
 
     String metricPublished = metricsName("published");
-    String metricProducerConfirmed = metricsName("confirmed");
+    String metricProducerConfirmed = metricsName("producer_confirmed");
     String metricConsumed = metricsName("consumed");
     String metricChunkSize = metricsName("chunk_size");
     String metricLatency = metricsName("latency");
