@@ -57,7 +57,7 @@
     <jgroups.version>5.3.8.Final</jgroups.version>
     <jgroups-kubernetes.version>2.0.2.Final</jgroups-kubernetes.version>
     <junit.jupiter.version>5.10.3</junit.jupiter.version>
-    <assertj.version>3.26.0</assertj.version>
+    <assertj.version>3.26.3</assertj.version>
     <spotless.check.skip>true</spotless.check.skip>
     <commons-lang3.version>3.13.0</commons-lang3.version>
     <commons-codec.version>1.16.0</commons-codec.version>
