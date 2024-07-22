@@ -49,7 +49,7 @@
     <amqp-client.version>5.21.0</amqp-client.version>
     <slf4j.version>2.0.13</slf4j.version>
     <logback.version>1.5.6</logback.version>
-    <netty.version>4.1.111.Final</netty.version>
+    <netty.version>4.1.112.Final</netty.version>
     <metrics.version>4.2.26</metrics.version>
     <micrometer.version>1.13.2</micrometer.version>
     <picocli.version>4.7.6</picocli.version>
