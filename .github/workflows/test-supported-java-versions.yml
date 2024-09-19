@@ -35,6 +35,6 @@ jobs:
         run: ./mvnw --version
       - name: Test
         run: |
-          ./mvnw verify -Drabbitmqctl.bin=DOCKER:rabbitmq
+          ./mvnw verify -Drabbitmqctl.bin=DOCKER:rabbitmq -Dspotbugs.skip=true
       - name: Stop broker
         run: docker stop rabbitmq && docker rm rabbitmq
