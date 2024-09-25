@@ -53,7 +53,7 @@
     <metrics.version>4.2.27</metrics.version>
     <micrometer.version>1.13.4</micrometer.version>
     <picocli.version>4.7.6</picocli.version>
-    <guava.version>33.3.0-jre</guava.version>
+    <guava.version>33.3.1-jre</guava.version>
     <jgroups.version>5.3.11.Final</jgroups.version>
     <jgroups-kubernetes.version>2.0.2.Final</jgroups-kubernetes.version>
     <junit.jupiter.version>5.11.0</junit.jupiter.version>
