@@ -558,7 +558,11 @@ public class StreamPerfTest implements Callable<Integer> {
       PrintStream consoleOut,
       PrintStream consoleErr,
       AddressResolver addressResolver) {
-    this.arguments = Arrays.copyOf(arguments, arguments.length);
+    if (arguments == null) {
+      this.arguments = new String[] {};
+    } else {
+      this.arguments = Arrays.copyOf(arguments, arguments.length);
+    }
     if (consoleOut == null) {
       consoleOut = System.out;
     }
