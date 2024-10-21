@@ -17,7 +17,7 @@ package com.rabbitmq.stream.perf;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
-import ch.qos.logback.core.util.StatusPrinter;
+import ch.qos.logback.core.util.StatusPrinter2;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -50,7 +50,7 @@ class LogUtils {
     } finally {
       configurationFile.close();
     }
-    StatusPrinter.printInCaseOfErrorsOrWarnings(context);
+    new StatusPrinter2().printInCaseOfErrorsOrWarnings(context);
   }
 
   private static Map<String, Object> convertKeyValuePairs(String arg) {
