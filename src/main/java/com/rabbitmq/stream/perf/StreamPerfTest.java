@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 Broadcom. All Rights Reserved.
+// Copyright (c) 2020-2024 Broadcom. All Rights Reserved.
 // The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 //
 // This software, the RabbitMQ Stream Performance Testing Tool, is dual-licensed under the
@@ -242,6 +242,12 @@ public class StreamPerfTest implements Callable<Integer> {
               + "e.g. PT10M30S for 10 minutes 30 seconds, P5DT8H for 5 days 8 hours.",
       converter = Utils.DurationTypeConverter.class)
   private Duration maxAge;
+
+  @CommandLine.Option(
+      names = {"--initial-member-count", "-imc"},
+      description = "the number of initial members streams should have.",
+      converter = Utils.PositiveIntegerTypeConverter.class)
+  private int initialMemberCount;
 
   @CommandLine.Option(
       names = {"--leader-locator", "-ll"},
@@ -1264,6 +1270,10 @@ public class StreamPerfTest implements Callable<Integer> {
 
     if (this.maxAge != null) {
       streamCreator.maxAge(this.maxAge);
+    }
+
+    if (this.initialMemberCount > 0) {
+      streamCreator.initialMemberCount(this.initialMemberCount);
     }
 
     try {
