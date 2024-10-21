@@ -56,7 +56,7 @@
     <guava.version>33.3.1-jre</guava.version>
     <jgroups.version>5.3.13.Final</jgroups.version>
     <jgroups-kubernetes.version>2.0.2.Final</jgroups-kubernetes.version>
-    <junit.jupiter.version>5.11.2</junit.jupiter.version>
+    <junit.jupiter.version>5.11.3</junit.jupiter.version>
     <assertj.version>3.26.3</assertj.version>
     <spotless.check.skip>true</spotless.check.skip>
     <commons-lang3.version>3.13.0</commons-lang3.version>
