@@ -452,6 +452,12 @@ public class StreamPerfTest implements Callable<Integer> {
       defaultValue = "false")
   private boolean forceReplicaForConsumers;
 
+  @CommandLine.Option(
+      names = {"--no-dev-mode", "-ndm"},
+      description = "do not use development mode (useful for local cluster)",
+      defaultValue = "false")
+  private boolean noDevMode;
+
   static class InstanceSyncOptions {
 
     @CommandLine.Option(
@@ -757,8 +763,14 @@ public class StreamPerfTest implements Callable<Integer> {
       shutdownService.wrap(
           closeStep("Closing environment executor", () -> envExecutor.shutdownNow()));
 
-      boolean tls = isTls(this.uris);
       AddressResolver addrResolver = null;
+      if (this.noDevMode) {
+        // we override the default address resolver with an instance that does the same thing
+        // the client library will not activate the development mode because of this
+        addrResolver = a -> a;
+      }
+
+      boolean tls = isTls(this.uris);
       if (loadBalancer) {
         int defaultPort = tls ? Client.DEFAULT_TLS_PORT : Client.DEFAULT_PORT;
         List<Address> addresses =
