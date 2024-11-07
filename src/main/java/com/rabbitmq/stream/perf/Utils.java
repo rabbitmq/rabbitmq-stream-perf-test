@@ -66,9 +66,7 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.LongSupplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.net.ssl.KeyManager;
@@ -827,8 +825,23 @@ class Utils {
 
   static class PerformanceMicrometerMetricsCollector extends MicrometerMetricsCollector {
 
-    public PerformanceMicrometerMetricsCollector(MeterRegistry registry, String prefix) {
+    private final IntConsumer publisherCallback;
+
+    public PerformanceMicrometerMetricsCollector(
+        MeterRegistry registry, String prefix, boolean batchSize) {
       super(registry, prefix);
+      if (batchSize) {
+        DistributionSummary publishBatchSize =
+            DistributionSummary.builder(prefix + ".publish_batch_size")
+                .description("publish batch size")
+                .publishPercentiles(0.5, 0.75, 0.95, 0.99)
+                .distributionStatisticExpiry(ofSeconds(1))
+                .serviceLevelObjectives()
+                .register(registry);
+        this.publisherCallback = publishBatchSize::record;
+      } else {
+        this.publisherCallback = ignored -> {};
+      }
     }
 
     @Override
@@ -847,6 +860,12 @@ class Utils {
           .distributionStatisticExpiry(ofSeconds(1))
           .serviceLevelObjectives()
           .register(registry);
+    }
+
+    @Override
+    public void publish(int count) {
+      super.publish(count);
+      this.publisherCallback.accept(count);
     }
 
     @Override
