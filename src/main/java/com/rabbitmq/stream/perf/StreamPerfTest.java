@@ -458,6 +458,18 @@ public class StreamPerfTest implements Callable<Integer> {
       defaultValue = "false")
   private boolean noDevMode;
 
+  @CommandLine.Option(
+      names = {"--dynamic-batch-size", "-dbs"},
+      description = "use dynamic batch size for publishing",
+      defaultValue = "false")
+  private boolean dynamicBatch;
+
+  @CommandLine.Option(
+      names = {"--batch-size-metric", "-bsm"},
+      description = "display batch size",
+      defaultValue = "false")
+  private boolean includeBatchSizeMetric;
+
   static class InstanceSyncOptions {
 
     @CommandLine.Option(
@@ -689,7 +701,9 @@ public class StreamPerfTest implements Callable<Integer> {
           .tags(tags)
           .register(meterRegistry);
     }
-    this.metricsCollector = new PerformanceMicrometerMetricsCollector(meterRegistry, metricsPrefix);
+    this.metricsCollector =
+        new PerformanceMicrometerMetricsCollector(
+            meterRegistry, metricsPrefix, this.includeBatchSizeMetric);
 
     Counter producerConfirm = meterRegistry.counter(metricsPrefix + ".producer_confirmed");
 
@@ -751,6 +765,7 @@ public class StreamPerfTest implements Callable<Integer> {
               metricsPrefix,
               this.summaryFile,
               this.includeByteRates,
+              this.includeBatchSizeMetric,
               this.confirmLatency,
               memoryReportSupplier,
               this.out);
@@ -972,6 +987,7 @@ public class StreamPerfTest implements Callable<Integer> {
                     ProducerBuilder producerBuilder =
                         environment
                             .producerBuilder()
+                            .dynamicBatch(this.dynamicBatch)
                             .batchPublishingDelay(ofMillis(this.batchPublishingDelay));
 
                     String producerName = this.producerNameStrategy.apply(stream, i + 1);

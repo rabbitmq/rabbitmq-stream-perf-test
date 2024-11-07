@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
@@ -56,6 +57,7 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
   private final boolean summaryFile;
   private final PrintWriter out;
   private final boolean includeByteRates;
+  private final boolean includeBatchSize;
   private final Supplier<String> memoryReportSupplier;
   private volatile Closeable closingSequence = () -> {};
   private volatile long lastPublishedCount = 0;
@@ -73,11 +75,13 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
       String metricsPrefix,
       boolean summaryFile,
       boolean includeByteRates,
+      boolean batchSize,
       boolean confirmLatency,
       Supplier<String> memoryReportSupplier,
       PrintWriter out) {
     this.summaryFile = summaryFile;
     this.includeByteRates = includeByteRates;
+    this.includeBatchSize = batchSize;
     this.memoryReportSupplier = memoryReportSupplier;
     this.out = out;
     this.metricsPrefix = metricsPrefix;
@@ -116,6 +120,7 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
     long startTime = System.nanoTime();
 
     String metricPublished = metricsName("published");
+    String metricPublishBatchSize = metricsName("publish_batch_size");
     String metricProducerConfirmed = metricsName("producer_confirmed");
     String metricConsumed = metricsName("consumed");
     String metricChunkSize = metricsName("chunk_size");
@@ -132,6 +137,10 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
                 metricConsumed,
                 metricChunkSize,
                 metricLatency));
+
+    if (this.includeBatchSize) {
+      allMetrics.add(metricPublishBatchSize);
+    }
 
     if (confirmLatency()) {
       allMetrics.add(metricConfirmLatency);
@@ -191,6 +200,17 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
                   });
             });
 
+    Consumer<StringBuilder> publishBatchSizeCallback;
+    if (this.includeBatchSize) {
+      HistogramSupport publishBatchSize = meterRegistry.get(metricPublishBatchSize).summary();
+      Function<HistogramSupport, String> formatPublishBatchSize =
+          histogram -> String.format("publish batch size %.0f", histogram.takeSnapshot().mean());
+      publishBatchSizeCallback =
+          sb -> sb.append(formatPublishBatchSize.apply(publishBatchSize)).append(", ");
+    } else {
+      publishBatchSizeCallback = ignored -> {};
+    }
+
     HistogramSupport chunkSize = meterRegistry.get(metricChunkSize).summary();
     Function<HistogramSupport, String> formatChunkSize =
         histogram -> String.format("chunk size %.0f", histogram.takeSnapshot().mean());
@@ -244,6 +264,7 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
                         .append(", ");
                   }
                   builder.append(formatLatency.apply("latency", latency)).append(", ");
+                  publishBatchSizeCallback.accept(builder);
                   builder.append(formatChunkSize.apply(chunkSize));
                   this.out.println(builder);
                   String memoryReport = this.memoryReportSupplier.get();
@@ -299,6 +320,7 @@ class DefaultPerformanceMetrics implements PerformanceMetrics {
                 .append(", ");
           }
           builder.append(formatLatencySummary.apply("latency", latency)).append(", ");
+          publishBatchSizeCallback.accept(builder);
           builder.append(formatChunkSize.apply(chunkSize));
           this.out.println();
           this.out.println(builder);
