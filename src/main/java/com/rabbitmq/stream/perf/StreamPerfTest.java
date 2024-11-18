@@ -22,8 +22,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Duration.ofMillis;
 
 import com.google.common.util.concurrent.RateLimiter;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.stream.*;
 import com.rabbitmq.stream.EnvironmentBuilder.TlsConfiguration;
 import com.rabbitmq.stream.StreamCreator.LeaderLocator;
@@ -77,7 +75,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -369,13 +366,13 @@ public class StreamPerfTest implements Callable<Integer> {
 
   @CommandLine.Option(
       names = {"--super-streams", "-sst"},
-      description = "use super streams",
+      description = "use super streams (RabbitMQ 3.13+)",
       defaultValue = "false")
   private boolean superStreams;
 
   @CommandLine.Option(
       names = {"--super-stream-partitions", "-ssp"},
-      description = "number of partitions for the super streams",
+      description = "number of partitions for the super streams (RabbitMQ 3.13+)",
       defaultValue = "3",
       converter = Utils.PositiveIntegerTypeConverter.class)
   private int superStreamsPartitions;
@@ -909,33 +906,8 @@ public class StreamPerfTest implements Callable<Integer> {
 
       streams = Utils.streams(this.streamCount, this.streams);
 
-      AtomicReference<Channel> amqpChannel = new AtomicReference<>();
-      Connection amqpConnection;
-      if (this.superStreams) {
-        amqpConnection = Utils.amqpConnection(this.amqpUri, uris, tls, this.sniServerNames);
-        if (this.deleteStreams) {
-          // we keep it open for deletion, so adding a close step
-          shutdownService.wrap(
-              closeStep("Closing AMQP connection for super streams", () -> amqpConnection.close()));
-        }
-        amqpChannel.set(amqpConnection.createChannel());
-      } else {
-        amqpConnection = null;
-      }
-
       for (String stream : streams) {
-        if (this.superStreams) {
-          List<String> partitions =
-              Utils.superStreamPartitions(stream, this.superStreamsPartitions);
-          for (String partition : partitions) {
-            createStream(environment, partition);
-          }
-
-          Utils.declareSuperStreamExchangeAndBindings(amqpChannel.get(), stream, partitions);
-
-        } else {
-          createStream(environment, stream);
-        }
+        createStream(environment, stream);
       }
 
       if (this.deleteStreams) {
@@ -943,31 +915,24 @@ public class StreamPerfTest implements Callable<Integer> {
             closeStep(
                 "Deleting stream(s)",
                 () -> {
+                  java.util.function.Consumer<String> delete =
+                      s -> {
+                        if (this.superStreams) {
+                          environment.deleteSuperStream(s);
+                        } else {
+                          environment.deleteStream(s);
+                        }
+                      };
                   for (String stream : streams) {
-                    if (this.superStreams) {
-                      List<String> partitions =
-                          Utils.superStreamPartitions(stream, this.superStreamsPartitions);
-                      for (String partition : partitions) {
-                        environment.deleteStream(partition);
-                      }
-                      Utils.deleteSuperStreamExchange(amqpChannel.get(), stream);
-
-                    } else {
-                      LOGGER.debug("Deleting {}", stream);
-                      try {
-                        environment.deleteStream(stream);
-                        LOGGER.debug("Deleted {}", stream);
-                      } catch (Exception e) {
-                        LOGGER.warn("Could not delete stream {}: {}", stream, e.getMessage());
-                      }
+                    LOGGER.debug("Deleting {}", stream);
+                    try {
+                      delete.accept(stream);
+                      LOGGER.debug("Deleted {}", stream);
+                    } catch (Exception e) {
+                      LOGGER.warn("Could not delete stream {}: {}", stream, e.getMessage());
                     }
                   }
                 }));
-      } else {
-        if (this.superStreams) {
-          // we don't want to delete the super streams at the end, so we close the AMQP connection
-          amqpConnection.close();
-        }
       }
 
       List<Producer> producers = Collections.synchronizedList(new ArrayList<>(this.producers));
@@ -1306,6 +1271,10 @@ public class StreamPerfTest implements Callable<Integer> {
 
     if (this.initialMemberCount > 0) {
       streamCreator.initialMemberCount(this.initialMemberCount);
+    }
+
+    if (this.superStreams) {
+      streamCreator.superStream().partitions(this.superStreamsPartitions);
     }
 
     try {
