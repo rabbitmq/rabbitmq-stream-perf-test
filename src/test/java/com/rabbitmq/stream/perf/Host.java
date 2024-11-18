@@ -94,10 +94,7 @@ final class Host {
   }
 
   static String rabbitmqctlCommand() {
-    String rabbitmqCtl = System.getProperty("rabbitmqctl.bin");
-    if (rabbitmqCtl == null) {
-      throw new IllegalStateException("Please define the rabbitmqctl.bin system property");
-    }
+    String rabbitmqCtl = System.getProperty("rabbitmqctl.bin", DOCKER_PREFIX);
     if (rabbitmqCtl.startsWith(DOCKER_PREFIX)) {
       String containerId = rabbitmqCtl.split(":")[1];
       return "docker exec " + containerId + " rabbitmqctl";
