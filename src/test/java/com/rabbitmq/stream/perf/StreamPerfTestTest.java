@@ -89,7 +89,11 @@ public class StreamPerfTestTest {
   }
 
   static void waitOneSecond() throws InterruptedException {
-    Thread.sleep(1000L);
+    wait(Duration.ofSeconds(1));
+  }
+
+  static void wait(Duration duration) throws InterruptedException {
+    Thread.sleep(duration.toMillis());
   }
 
   private static HttpResponse httpRequest(String urlString) throws Exception {
@@ -427,7 +431,7 @@ public class StreamPerfTestTest {
 
   @Test
   void publishConfirmLatencyShouldBeIncludedWhenOptionIsEnabled() throws Exception {
-    Future<?> run = run(builder().confirmLatency());
+    Future<?> run = run(builder().confirmLatency().dynamicBatch(false));
     waitUntilStreamExists(s);
     waitOneSecond();
     run.cancel(true);
@@ -616,6 +620,11 @@ public class StreamPerfTestTest {
 
     ArgumentsBuilder confirmLatency() {
       arguments.put("confirm-latency", "");
+      return this;
+    }
+
+    ArgumentsBuilder dynamicBatch(boolean dynamicBatch) {
+      arguments.put("dynamic-batch-size", String.valueOf(dynamicBatch));
       return this;
     }
 
