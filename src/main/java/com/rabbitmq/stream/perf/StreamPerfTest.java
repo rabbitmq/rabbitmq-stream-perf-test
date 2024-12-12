@@ -458,7 +458,7 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--dynamic-batch-size", "-dbs"},
       description = "use dynamic batch size for publishing",
-      defaultValue = "false")
+      defaultValue = "true")
   private boolean dynamicBatch;
 
   @CommandLine.Option(
@@ -504,7 +504,7 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--initial-credits", "-ic"},
       description = "initial credits for subscription",
-      defaultValue = "1",
+      defaultValue = "10",
       converter = Utils.NotNegativeIntegerTypeConverter.class)
   private int initialCredits;
 
