@@ -73,7 +73,7 @@
     <asciidoctor.maven.plugin.version>3.1.1</asciidoctor.maven.plugin.version>
     <asciidoctorj.version>3.0.0</asciidoctorj.version>
     <asciidoctorj.diagram.version>2.3.1</asciidoctorj.diagram.version>
-    <spotless.version>2.43.0</spotless.version>
+    <spotless.version>2.44.0</spotless.version>
     <google-java-format.version>1.21.0</google-java-format.version>
     <spotbugs-maven-plugin.version>4.8.6.6</spotbugs-maven-plugin.version>
     <spotbugs.version>4.8.6</spotbugs.version>
