@@ -208,20 +208,18 @@ public class ConvertersTest {
   }
 
   @ParameterizedTest
-  @CsvSource({"5000,5", "0,0", "1000,1"})
-  void microSecondsToDurationTypeConverterOk(String value, long expectedInMs) {
-    Converters.MicroSecondsToDurationTypeConverter converter =
-        new Converters.MicroSecondsToDurationTypeConverter();
+  @CsvSource({"50ms,50", "0,0", "1s,1000", "10m30s,630000", "PT1M30S,90000"})
+  void durationTypeConverterOk(String value, long expectedInMs) {
+    Converters.DurationTypeConverter converter = new Converters.DurationTypeConverter();
     Duration duration = converter.convert(value);
     assertThat(duration).isNotNull();
     assertThat(duration).isEqualTo(Duration.ofMillis(expectedInMs));
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"-1000000", "abc", "1.5"})
-  void microSecondsToDurationTypeConverterKo(String value) {
-    Converters.MicroSecondsToDurationTypeConverter converter =
-        new Converters.MicroSecondsToDurationTypeConverter();
+  @ValueSource(strings = {"1", "abc", "1.5"})
+  void durationTypeConverterKo(String value) {
+    Converters.DurationTypeConverter converter = new Converters.DurationTypeConverter();
     assertThatThrownBy(() -> converter.convert(value))
         .isInstanceOf(CommandLine.TypeConversionException.class)
         .hasMessageContaining("valid");
