@@ -556,6 +556,13 @@ public class StreamPerfTest implements Callable<Integer> {
       defaultValue = "true")
   private boolean tcpNoDelay;
 
+  @CommandLine.Option(
+      names = {"--consumer-latency", "-L"},
+      description = "consumer latency in microseconds",
+      converter = Converters.MicroSecondsToDurationTypeConverter.class,
+      defaultValue = "0")
+  private Duration consumerLatency;
+
   private MetricsCollector metricsCollector;
   private PerformanceMetrics performanceMetrics;
   private List<Monitoring> monitorings;
@@ -1124,6 +1131,7 @@ public class StreamPerfTest implements Callable<Integer> {
                                   .builder();
                         }
 
+                        Runnable latencyWorker = Utils.latencyWorker(this.consumerLatency);
                         consumerBuilder =
                             consumerBuilder.messageHandler(
                                 (context, message) -> {
@@ -1137,12 +1145,12 @@ public class StreamPerfTest implements Callable<Integer> {
                                     // tool
                                   }
                                   metrics.offset(context.offset());
+                                  latencyWorker.run();
                                 });
 
                         consumerBuilder = maybeConfigureForFiltering(consumerBuilder);
 
-                        Consumer consumer = consumerBuilder.build();
-                        return consumer;
+                        return consumerBuilder.build();
                       })
                   .collect(Collectors.toList()));
 

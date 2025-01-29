@@ -207,6 +207,26 @@ public class ConvertersTest {
         .contains(new SNIHostName("dummy"));
   }
 
+  @ParameterizedTest
+  @CsvSource({"5000,5", "0,0", "1000,1"})
+  void microSecondsToDurationTypeConverterOk(String value, long expectedInMs) {
+    Converters.MicroSecondsToDurationTypeConverter converter =
+        new Converters.MicroSecondsToDurationTypeConverter();
+    Duration duration = converter.convert(value);
+    assertThat(duration).isNotNull();
+    assertThat(duration).isEqualTo(Duration.ofMillis(expectedInMs));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"-1000000", "abc", "1.5"})
+  void microSecondsToDurationTypeConverterKo(String value) {
+    Converters.MicroSecondsToDurationTypeConverter converter =
+        new Converters.MicroSecondsToDurationTypeConverter();
+    assertThatThrownBy(() -> converter.convert(value))
+        .isInstanceOf(CommandLine.TypeConversionException.class)
+        .hasMessageContaining("valid");
+  }
+
   private static Tag tag(String key, String value) {
     return Tag.of(key, value);
   }

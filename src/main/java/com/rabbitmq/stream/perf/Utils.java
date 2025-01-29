@@ -481,4 +481,30 @@ class Utils {
       return setSize - 3;
     }
   }
+
+  static Runnable latencyWorker(Duration latency) {
+    if (latency.isZero()) {
+      return () -> {};
+    } else if (latency.toMillis() >= 1) {
+      long latencyInMs = latency.toMillis();
+      return () -> latencySleep(latencyInMs);
+    } else {
+      long latencyInNs = latency.toNanos();
+      return () -> latencyBusyWait(latencyInNs);
+    }
+  }
+
+  private static void latencySleep(long delayInMs) {
+    try {
+      Thread.sleep(delayInMs);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+  }
+
+  private static void latencyBusyWait(long delayInNs) {
+    long start = System.nanoTime();
+    while (System.nanoTime() - start < delayInNs)
+      ;
+  }
 }

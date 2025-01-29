@@ -304,6 +304,23 @@ final class Converters {
     }
   }
 
+  static class MicroSecondsToDurationTypeConverter implements CommandLine.ITypeConverter<Duration> {
+
+    @Override
+    public Duration convert(String value) {
+      try {
+        Duration duration = Duration.ofNanos(Long.parseLong(value) * 1_000);
+        if (duration.isNegative()) {
+          throw new CommandLine.TypeConversionException(
+              "'" + value + "' is not valid, it must be greater than or equal to 0");
+        }
+        return duration;
+      } catch (NumberFormatException e) {
+        throw new CommandLine.TypeConversionException("'" + value + "' is not a valid number");
+      }
+    }
+  }
+
   static class LeaderLocatorTypeConverter
       implements CommandLine.ITypeConverter<StreamCreator.LeaderLocator> {
 
