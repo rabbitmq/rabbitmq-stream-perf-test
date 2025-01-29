@@ -128,35 +128,35 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--producers", "-x"},
       description = "number of producers",
       defaultValue = "1",
-      converter = Utils.NotNegativeIntegerTypeConverter.class)
+      converter = Converters.NotNegativeIntegerTypeConverter.class)
   private int producers;
 
   @CommandLine.Option(
       names = {"--consumers", "-y"},
       description = "number of consumers",
       defaultValue = "1",
-      converter = Utils.NotNegativeIntegerTypeConverter.class)
+      converter = Converters.NotNegativeIntegerTypeConverter.class)
   private int consumers;
 
   @CommandLine.Option(
       names = {"--size", "-s"},
       description = "size of messages in bytes",
       defaultValue = "10",
-      converter = Utils.NotNegativeIntegerTypeConverter.class)
+      converter = Converters.NotNegativeIntegerTypeConverter.class)
   private volatile int messageSize;
 
   @CommandLine.Option(
       names = {"--confirms", "-c"},
       description = "outstanding confirms",
       defaultValue = "10000",
-      converter = Utils.NotNegativeIntegerTypeConverter.class)
+      converter = Converters.NotNegativeIntegerTypeConverter.class)
   private int confirms;
 
   @CommandLine.Option(
       names = {"--stream-count", "-sc"},
       description = "number of streams to send and consume from. Examples: 10, 1-10.",
       defaultValue = "1",
-      converter = Utils.RangeTypeConverter.class)
+      converter = Converters.RangeTypeConverter.class)
   private String streamCount;
 
   @CommandLine.Option(
@@ -179,7 +179,7 @@ public class StreamPerfTest implements Callable<Integer> {
               + "Valid values are 'first', 'last', 'next', an unsigned long, "
               + "or an ISO 8601 formatted timestamp (eg. 2020-06-03T07:45:54Z).",
       defaultValue = "next",
-      converter = Utils.OffsetSpecificationTypeConverter.class)
+      converter = Converters.OffsetSpecificationTypeConverter.class)
   private OffsetSpecification offset;
 
   @CommandLine.Option(
@@ -192,21 +192,21 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--batch-size", "-bs"},
       description = "size of a batch of published messages",
       defaultValue = "100",
-      converter = Utils.PositiveIntegerTypeConverter.class)
+      converter = Converters.PositiveIntegerTypeConverter.class)
   private int batchSize;
 
   @CommandLine.Option(
       names = {"--batch-publishing-delay", "-bpd"},
       description = "Period to send a batch of messages in milliseconds",
       defaultValue = "100",
-      converter = Utils.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
+      converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
   private int batchPublishingDelay;
 
   @CommandLine.Option(
       names = {"--sub-entry-size", "-ses"},
       description = "number of messages packed into a normal message entry",
       defaultValue = "1",
-      converter = Utils.PositiveIntegerTypeConverter.class)
+      converter = Converters.PositiveIntegerTypeConverter.class)
   private int subEntrySize;
 
   @CommandLine.Option(
@@ -214,7 +214,7 @@ public class StreamPerfTest implements Callable<Integer> {
       description =
           "compression codec to use for sub-entries. Values: none, gzip, snappy, lz4, zstd.",
       defaultValue = "none",
-      converter = Utils.CompressionTypeConverter.class)
+      converter = Converters.CompressionTypeConverter.class)
   private Compression compression;
 
   @CommandLine.Option(
@@ -227,7 +227,7 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--max-length-bytes", "-mlb"},
       description = "max size of created streams, use 0 for no limit",
       defaultValue = "20gb",
-      converter = Utils.ByteCapacityTypeConverter.class)
+      converter = Converters.ByteCapacityTypeConverter.class)
   private ByteCapacity maxLengthBytes;
 
   private ByteCapacity maxSegmentSize;
@@ -237,13 +237,13 @@ public class StreamPerfTest implements Callable<Integer> {
       description =
           "max age of segments using the ISO 8601 duration format, "
               + "e.g. PT10M30S for 10 minutes 30 seconds, P5DT8H for 5 days 8 hours.",
-      converter = Utils.DurationTypeConverter.class)
+      converter = Converters.DurationTypeConverter.class)
   private Duration maxAge;
 
   @CommandLine.Option(
       names = {"--initial-member-count", "-imc"},
       description = "the number of initial members streams should have.",
-      converter = Utils.PositiveIntegerTypeConverter.class)
+      converter = Converters.PositiveIntegerTypeConverter.class)
   private int initialMemberCount;
 
   @CommandLine.Option(
@@ -251,7 +251,7 @@ public class StreamPerfTest implements Callable<Integer> {
       description =
           "leader locator strategy for created stream. "
               + "Possible values: client-local, balanced (RabbitMQ 3.10), least-leaders, random.",
-      converter = Utils.LeaderLocatorTypeConverter.class,
+      converter = Converters.LeaderLocatorTypeConverter.class,
       defaultValue = "least-leaders")
   private LeaderLocator leaderLocator;
 
@@ -277,7 +277,7 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--producers-by-connection", "-pbc"},
       description = "number of producers by connection. Value must be between 1 and 255.",
       defaultValue = "1",
-      converter = Utils.OneTo255RangeIntegerTypeConverter.class)
+      converter = Converters.OneTo255RangeIntegerTypeConverter.class)
   private int producersByConnection;
 
   @CommandLine.Option(
@@ -288,21 +288,21 @@ public class StreamPerfTest implements Callable<Integer> {
               + "If set, a publishing ID is automatically assigned to each outbound message.",
       defaultValue = "",
       showDefaultValue = CommandLine.Help.Visibility.NEVER,
-      converter = Utils.NameStrategyConverter.class)
+      converter = Converters.NameStrategyConverter.class)
   private BiFunction<String, Integer, String> producerNameStrategy;
 
   @CommandLine.Option(
       names = {"--tracking-consumers-by-connection", "-ccbc"},
       description = "number of tracking consumers by connection. Value must be between 1 and 255.",
       defaultValue = "50",
-      converter = Utils.OneTo255RangeIntegerTypeConverter.class)
+      converter = Converters.OneTo255RangeIntegerTypeConverter.class)
   private int trackingConsumersByConnection;
 
   @CommandLine.Option(
       names = {"--consumers-by-connection", "-cbc"},
       description = "number of consumers by connection. Value must be between 1 and 255.",
       defaultValue = "1",
-      converter = Utils.OneTo255RangeIntegerTypeConverter.class)
+      converter = Converters.OneTo255RangeIntegerTypeConverter.class)
   private int consumersByConnection;
 
   @CommandLine.Option(
@@ -317,7 +317,7 @@ public class StreamPerfTest implements Callable<Integer> {
           "naming strategy for consumer names. Valid values are 'uuid' or a pattern with "
               + "stream name and consumer index as arguments.",
       defaultValue = "%s-%d",
-      converter = Utils.NameStrategyConverter.class)
+      converter = Converters.NameStrategyConverter.class)
   private BiFunction<String, Integer, String> consumerNameStrategy;
 
   @CommandLine.Option(
@@ -336,7 +336,7 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--server-name-indication", "-sni"},
       description = "server names for Server Name Indication TLS parameter, separated by commas",
       defaultValue = "",
-      converter = Utils.SniServerNamesConverter.class)
+      converter = Converters.SniServerNamesConverter.class)
   private List<SNIServerName> sniServerNames;
 
   @CommandLine.Option(
@@ -355,7 +355,7 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--rpc-timeout", "-rt"},
       description = "RPC timeout in seconds",
       defaultValue = "10",
-      converter = Utils.PositiveIntegerTypeConverter.class)
+      converter = Converters.PositiveIntegerTypeConverter.class)
   private int rpcTimeout;
 
   @CommandLine.Option(
@@ -374,7 +374,7 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--super-stream-partitions", "-ssp"},
       description = "number of partitions for the super streams (RabbitMQ 3.13+)",
       defaultValue = "3",
-      converter = Utils.PositiveIntegerTypeConverter.class)
+      converter = Converters.PositiveIntegerTypeConverter.class)
   private int superStreamsPartitions;
 
   @CommandLine.Option(
@@ -392,14 +392,14 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--time", "-z"},
       description = "run duration in seconds, unlimited by default",
       defaultValue = "0",
-      converter = Utils.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
+      converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
   private int time;
 
   @CommandLine.Option(
       names = {"--metrics-tags", "-mt"},
       description = "metrics tags as key-value pairs separated by commas",
       defaultValue = "",
-      converter = Utils.MetricsTagsTypeConverter.class)
+      converter = Converters.MetricsTagsTypeConverter.class)
   private Collection<Tag> metricsTags;
 
   @CommandLine.Option(
@@ -412,7 +412,7 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--requested-max-frame-size", "-rmfs"},
       description = "maximum frame size to request",
       defaultValue = "1048576",
-      converter = Utils.ByteCapacityTypeConverter.class)
+      converter = Converters.ByteCapacityTypeConverter.class)
   private ByteCapacity requestedMaxFrameSize;
 
   @CommandLine.Option(
@@ -427,7 +427,7 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--filter-value-set", "-fvs"},
       description = "filter value set for publishers, range (e.g. 1..15) are accepted",
-      converter = Utils.FilterValueSetConverter.class)
+      converter = Converters.FilterValueSetConverter.class)
   private List<String> filterValueSet;
 
   @CommandLine.Option(
@@ -440,7 +440,7 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--filter-size", "-fs"},
       description = "filter size, between 16 and 255",
       defaultValue = "16",
-      converter = Utils.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
+      converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
   private int filterSize;
 
   @CommandLine.Option(
@@ -481,7 +481,7 @@ public class StreamPerfTest implements Callable<Integer> {
             "number of expected StreamPerfTest instances "
                 + "to synchronize. Default is 0, that is no synchronization."
                 + "Test ID is mandatory when instance synchronization is in use.",
-        converter = Utils.GreaterThanOrEqualToZeroIntegerTypeConverter.class,
+        converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class,
         required = true)
     private int expectedInstances;
 
@@ -489,7 +489,7 @@ public class StreamPerfTest implements Callable<Integer> {
         names = {"--instance-sync-timeout", "-ist"},
         description = "Instance synchronization time " + "in seconds. Default is 600 seconds.",
         defaultValue = "600",
-        converter = Utils.PositiveIntegerTypeConverter.class,
+        converter = Converters.PositiveIntegerTypeConverter.class,
         required = false)
     private int instanceSyncTimeout;
 
@@ -505,14 +505,14 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--initial-credits", "-ic"},
       description = "initial credits for subscription",
       defaultValue = "10",
-      converter = Utils.NotNegativeIntegerTypeConverter.class)
+      converter = Converters.NotNegativeIntegerTypeConverter.class)
   private int initialCredits;
 
   @CommandLine.Option(
       names = {"--heartbeat", "-b"},
       description = "requested heartbeat in seconds",
       defaultValue = "60",
-      converter = Utils.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
+      converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
   private int heartbeat;
 
   @CommandLine.Option(
@@ -522,7 +522,7 @@ public class StreamPerfTest implements Callable<Integer> {
               + "Examples: 5 for a fixed delay of 5 seconds, 5:10 for a first attempt after 5 seconds then "
               + "10 seconds between attempts.",
       defaultValue = "5",
-      converter = Utils.BackOffDelayPolicyTypeConverter.class)
+      converter = Converters.BackOffDelayPolicyTypeConverter.class)
   private BackOffDelayPolicy recoveryBackOffDelayPolicy;
 
   @CommandLine.Option(
@@ -532,21 +532,21 @@ public class StreamPerfTest implements Callable<Integer> {
               + "Examples: 5 for a fixed delay of 5 seconds, 5:10 for a first attempt after 5 seconds then "
               + "10 seconds between attempts.",
       defaultValue = "5:1",
-      converter = Utils.BackOffDelayPolicyTypeConverter.class)
+      converter = Converters.BackOffDelayPolicyTypeConverter.class)
   private BackOffDelayPolicy topologyBackOffDelayPolicy;
 
   @CommandLine.Option(
       names = {"--tcp-send-buffer-size", "-tsbs"},
       description = "TCP SO_SNDBUF option, default is platform value.",
       defaultValue = "0",
-      converter = Utils.ByteCapacityTypeConverter.class)
+      converter = Converters.ByteCapacityTypeConverter.class)
   private ByteCapacity tcpSndBuff;
 
   @CommandLine.Option(
       names = {"--tcp-receive-buffer-size", "-trbs"},
       description = "TCP SO_RCVBUF option, default is platform value.",
       defaultValue = "0",
-      converter = Utils.ByteCapacityTypeConverter.class)
+      converter = Converters.ByteCapacityTypeConverter.class)
   private ByteCapacity tcpRcvBuff;
 
   @CommandLine.Option(
@@ -665,7 +665,7 @@ public class StreamPerfTest implements Callable<Integer> {
       names = {"--stream-max-segment-size-bytes", "-smssb"},
       description = "max size of segments",
       defaultValue = "500mb",
-      converter = Utils.ByteCapacityTypeConverter.class)
+      converter = Converters.ByteCapacityTypeConverter.class)
   public void setMaxSegmentSize(ByteCapacity in) {
     if (in != null && in.compareTo(StreamCreator.MAX_SEGMENT_SIZE) > 0) {
       throw new ParameterException(
