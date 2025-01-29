@@ -235,9 +235,10 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--max-age", "-ma"},
       description =
-          "max age of segments using the ISO 8601 duration format, "
-              + "e.g. PT10M30S for 10 minutes 30 seconds, P5DT8H for 5 days 8 hours.",
-      converter = Converters.DurationTypeConverter.class)
+          "max age of segments using Golang parseDuration syntax or the ISO 8601 duration format, "
+              + "e.g. 10m30s for 10 minutes 30 seconds (d, w, y not supported) or "
+              + "PT10M30S for 10 minutes 30 seconds, P5DT8H for 5 days 8 hours.",
+      converter = Converters.PositiveDurationTypeConverter.class)
   private Duration maxAge;
 
   @CommandLine.Option(
@@ -555,6 +556,15 @@ public class StreamPerfTest implements Callable<Integer> {
       arity = "1",
       defaultValue = "true")
   private boolean tcpNoDelay;
+
+  @CommandLine.Option(
+      names = {"--consumer-latency", "-L"},
+      description =
+          "consumer latency using Golang parseDuration syntax, "
+              + "e.g. 5 ms (d, w, y are not supported)",
+      converter = Converters.GreaterThanOrEqualToZeroDurationTypeConverter.class,
+      defaultValue = "0")
+  private Duration consumerLatency;
 
   private MetricsCollector metricsCollector;
   private PerformanceMetrics performanceMetrics;
@@ -1124,6 +1134,7 @@ public class StreamPerfTest implements Callable<Integer> {
                                   .builder();
                         }
 
+                        Runnable latencyWorker = Utils.latencyWorker(this.consumerLatency);
                         consumerBuilder =
                             consumerBuilder.messageHandler(
                                 (context, message) -> {
@@ -1137,12 +1148,12 @@ public class StreamPerfTest implements Callable<Integer> {
                                     // tool
                                   }
                                   metrics.offset(context.offset());
+                                  latencyWorker.run();
                                 });
 
                         consumerBuilder = maybeConfigureForFiltering(consumerBuilder);
 
-                        Consumer consumer = consumerBuilder.build();
-                        return consumer;
+                        return consumerBuilder.build();
                       })
                   .collect(Collectors.toList()));
 

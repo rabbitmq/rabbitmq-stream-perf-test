@@ -35,9 +35,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.net.ssl.SNIHostName;
 import javax.net.ssl.SNIServerName;
+import org.threeten.extra.AmountFormats;
 import picocli.CommandLine;
 
 final class Converters {
+
+  private static final CommandLine.ITypeConverter<Duration> DURATION_TYPE_CONVERTER =
+      new DurationTypeConverter();
 
   private Converters() {}
 
@@ -290,17 +294,48 @@ final class Converters {
 
     @Override
     public Duration convert(String value) {
+      Duration duration = null;
       try {
-        Duration duration = Duration.parse(value);
-        if (duration.isNegative() || duration.isZero()) {
-          throw new CommandLine.TypeConversionException(
-              "'" + value + "' is not valid, it must be positive");
-        }
-        return duration;
+        duration = AmountFormats.parseUnitBasedDuration(value);
       } catch (DateTimeParseException e) {
-        throw new CommandLine.TypeConversionException(
-            "'" + value + "' is not valid, valid example values: PT15M, PT10H");
+
       }
+      if (duration == null) {
+        try {
+          duration = Duration.parse(value);
+        } catch (DateTimeParseException e) {
+          throw new CommandLine.TypeConversionException(
+              "'" + value + "' is not valid, valid example values: PT15M, PT10H");
+        }
+      }
+      return duration;
+    }
+  }
+
+  static class PositiveDurationTypeConverter implements CommandLine.ITypeConverter<Duration> {
+
+    @Override
+    public Duration convert(String value) throws Exception {
+      Duration duration = DURATION_TYPE_CONVERTER.convert(value);
+      if (duration.isNegative() || duration.isZero()) {
+        throw new CommandLine.TypeConversionException(
+            "'" + value + "' is not valid, it must be positive");
+      }
+      return duration;
+    }
+  }
+
+  static class GreaterThanOrEqualToZeroDurationTypeConverter
+      implements CommandLine.ITypeConverter<Duration> {
+
+    @Override
+    public Duration convert(String value) throws Exception {
+      Duration duration = DURATION_TYPE_CONVERTER.convert(value);
+      if (duration.isNegative()) {
+        throw new CommandLine.TypeConversionException(
+            "'" + value + "' is not valid, it must be greater than or equal to 0");
+      }
+      return duration;
     }
   }
 
