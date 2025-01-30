@@ -43,6 +43,8 @@ final class Converters {
   private static final CommandLine.ITypeConverter<Duration> DURATION_TYPE_CONVERTER =
       new DurationTypeConverter();
 
+  static final CommandLine.ITypeConverter<Boolean> BOOLEAN_TYPE_CONVERTER = new BooleanConverter();
+
   private Converters() {}
 
   static void typeConversionException(String message) {
@@ -430,6 +432,18 @@ final class Converters {
         return value;
       } catch (Exception e) {
         throw new CommandLine.TypeConversionException(input + " is not greater than or equal to 0");
+      }
+    }
+  }
+
+  static class BooleanConverter implements CommandLine.ITypeConverter<Boolean> {
+
+    @Override
+    public Boolean convert(String value) {
+      if ("true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value)) {
+        return Boolean.parseBoolean(value);
+      } else {
+        throw new CommandLine.TypeConversionException("'" + value + "' is not a boolean");
       }
     }
   }
