@@ -17,7 +17,6 @@ package com.rabbitmq.stream.perf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.concurrent.Callable;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
@@ -203,26 +202,5 @@ public class PicoCliTest {
 
   private static String[] args(String line) {
     return line.split(" ");
-  }
-
-  @CommandLine.Command(
-      name = "stream-perf-test",
-      mixinStandardHelpOptions = false,
-      showDefaultValues = true,
-      description = "Tests the performance of stream queues in RabbitMQ.")
-  private static class AppWithBooleanOption implements Callable<Integer> {
-
-    @CommandLine.Option(
-        names = {"--confirm-latency", "-cl"},
-        description = "evaluate confirm latency",
-        arity = "0..1",
-        fallbackValue = "true",
-        defaultValue = "false")
-    private boolean confirmLatency;
-
-    @Override
-    public Integer call() {
-      return 0;
-    }
   }
 }
