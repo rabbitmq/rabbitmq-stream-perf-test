@@ -94,6 +94,7 @@ import picocli.CommandLine.Spec;
     name = "stream-perf-test",
     mixinStandardHelpOptions = false,
     showDefaultValues = true,
+    separator = " ",
     description = "Tests the performance of stream queues in RabbitMQ.")
 public class StreamPerfTest implements Callable<Integer> {
 
@@ -169,8 +170,14 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--delete-streams", "-ds"},
       description = "whether to delete stream(s) after the run or not",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean deleteStreams;
+  void setDeleteStreams(String input) throws Exception {
+    this.deleteStreams = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean deleteStreams;
 
   @CommandLine.Option(
       names = {"--offset", "-o"},
@@ -265,14 +272,26 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--version", "-v"},
       description = "show version information",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean version;
+  void setVersion(String input) throws Exception {
+    this.version = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean version;
 
   @CommandLine.Option(
       names = {"--summary-file", "-sf"},
       description = "generate a summary file with metrics",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean summaryFile;
+  void setSummaryFile(String input) throws Exception {
+    this.summaryFile = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean summaryFile;
 
   @CommandLine.Option(
       names = {"--producers-by-connection", "-pbc"},
@@ -309,8 +328,14 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--load-balancer", "-lb"},
       description = "assume URIs point to a load balancer",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean loadBalancer;
+  void setLoadBalancer(String input) throws Exception {
+    this.loadBalancer = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean loadBalancer;
 
   @CommandLine.Option(
       names = {"--consumer-names", "-cn"},
@@ -324,14 +349,26 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--metrics-byte-rates", "-mbr"},
       description = "include written and read byte rates in metrics",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean includeByteRates;
+  void setIncludeByteRates(String input) throws Exception {
+    this.includeByteRates = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean includeByteRates;
 
   @CommandLine.Option(
       names = {"--memory-report", "-mr"},
       description = "report information on memory settings and usage",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean memoryReport;
+  void setMemoryReport(String input) throws Exception {
+    this.memoryReport = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean memoryReport;
 
   @CommandLine.Option(
       names = {"--server-name-indication", "-sni"},
@@ -349,8 +386,14 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--environment-variables", "-env"},
       description = "show usage with environment variables",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean environmentVariables;
+  void setEnvironmentVariables(String input) throws Exception {
+    this.environmentVariables = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean environmentVariables;
 
   @CommandLine.Option(
       names = {"--rpc-timeout", "-rt"},
@@ -362,14 +405,26 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--confirm-latency", "-cl"},
       description = "evaluate confirm latency",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean confirmLatency;
+  void setConfirmLatency(String input) throws Exception {
+    this.confirmLatency = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean confirmLatency;
 
   @CommandLine.Option(
       names = {"--super-streams", "-sst"},
       description = "use super streams (RabbitMQ 3.13+)",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean superStreams;
+  void setSuperStreams(String input) throws Exception {
+    this.superStreams = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean superStreams;
 
   @CommandLine.Option(
       names = {"--super-stream-partitions", "-ssp"},
@@ -381,8 +436,14 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--single-active-consumer", "-sac"},
       description = "use single active consumer",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean singleActiveConsumer;
+  void setSingleActiveConsumer(String input) throws Exception {
+    this.singleActiveConsumer = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean singleActiveConsumer;
 
   @CommandLine.Option(
       names = {"--amqp-uri", "-au"},
@@ -406,8 +467,14 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--metrics-command-line-arguments", "-mcla"},
       description = "add fixed metrics with command line arguments label",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean metricsCommandLineArguments;
+  void setMetricsCommandLineArguments(String input) throws Exception {
+    this.metricsCommandLineArguments = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean metricsCommandLineArguments;
 
   @CommandLine.Option(
       names = {"--requested-max-frame-size", "-rmfs"},
@@ -419,8 +486,14 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--native-epoll", "-ne"},
       description = "use Netty's native epoll transport (Linux x86-64 only)",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean nativeEpoll;
+  void setNativeEpoll(String input) throws Exception {
+    this.nativeEpoll = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean nativeEpoll;
 
   @ArgGroup(exclusive = false, multiplicity = "0..1")
   InstanceSyncOptions instanceSyncOptions;
@@ -447,26 +520,50 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--force-replica-for-consumers", "-frfc"},
       description = "force the connection to a replica for consumers",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean forceReplicaForConsumers;
+  void setForceReplicaForConsumers(String input) throws Exception {
+    this.forceReplicaForConsumers = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean forceReplicaForConsumers;
 
   @CommandLine.Option(
       names = {"--no-dev-mode", "-ndm"},
       description = "do not use development mode (useful for local cluster)",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean noDevMode;
+  void setNoDevMode(String input) throws Exception {
+    this.noDevMode = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean noDevMode;
 
   @CommandLine.Option(
       names = {"--dynamic-batch-size", "-dbs"},
       description = "use dynamic batch size for publishing",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "true")
-  private boolean dynamicBatch;
+  void setDynamicBatch(String input) throws Exception {
+    this.dynamicBatch = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean dynamicBatch;
 
   @CommandLine.Option(
       names = {"--batch-size-metric", "-bsm"},
       description = "display batch size",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "false")
-  private boolean includeBatchSizeMetric;
+  void setIncludeByteSizeMetric(String input) throws Exception {
+    this.includeBatchSizeMetric = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean includeBatchSizeMetric;
 
   static class InstanceSyncOptions {
 
@@ -553,9 +650,14 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--tcp-no-delay", "-tnd"},
       description = "TCP NODELAY",
-      arity = "1",
+      arity = "0..1",
+      fallbackValue = "true",
       defaultValue = "true")
-  private boolean tcpNoDelay;
+  void setTcpNoDelay(String input) throws Exception {
+    this.tcpNoDelay = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  boolean tcpNoDelay;
 
   @CommandLine.Option(
       names = {"--consumer-latency", "-L"},
