@@ -177,7 +177,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.deleteStreams = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean deleteStreams;
+  volatile boolean deleteStreams;
 
   @CommandLine.Option(
       names = {"--offset", "-o"},
@@ -279,7 +279,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.version = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean version;
+  volatile boolean version;
 
   @CommandLine.Option(
       names = {"--summary-file", "-sf"},
@@ -291,7 +291,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.summaryFile = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean summaryFile;
+  volatile boolean summaryFile;
 
   @CommandLine.Option(
       names = {"--producers-by-connection", "-pbc"},
@@ -335,7 +335,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.loadBalancer = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean loadBalancer;
+  volatile boolean loadBalancer;
 
   @CommandLine.Option(
       names = {"--consumer-names", "-cn"},
@@ -356,7 +356,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.includeByteRates = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean includeByteRates;
+  volatile boolean includeByteRates;
 
   @CommandLine.Option(
       names = {"--memory-report", "-mr"},
@@ -368,7 +368,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.memoryReport = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean memoryReport;
+  volatile boolean memoryReport;
 
   @CommandLine.Option(
       names = {"--server-name-indication", "-sni"},
@@ -393,7 +393,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.environmentVariables = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean environmentVariables;
+  volatile boolean environmentVariables;
 
   @CommandLine.Option(
       names = {"--rpc-timeout", "-rt"},
@@ -412,7 +412,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.confirmLatency = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean confirmLatency;
+  volatile boolean confirmLatency;
 
   @CommandLine.Option(
       names = {"--super-streams", "-sst"},
@@ -424,7 +424,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.superStreams = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean superStreams;
+  volatile boolean superStreams;
 
   @CommandLine.Option(
       names = {"--super-stream-partitions", "-ssp"},
@@ -474,7 +474,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.metricsCommandLineArguments = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean metricsCommandLineArguments;
+  volatile boolean metricsCommandLineArguments;
 
   @CommandLine.Option(
       names = {"--requested-max-frame-size", "-rmfs"},
@@ -493,7 +493,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.nativeEpoll = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean nativeEpoll;
+  volatile boolean nativeEpoll;
 
   @ArgGroup(exclusive = false, multiplicity = "0..1")
   InstanceSyncOptions instanceSyncOptions;
@@ -527,7 +527,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.forceReplicaForConsumers = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean forceReplicaForConsumers;
+  volatile boolean forceReplicaForConsumers;
 
   @CommandLine.Option(
       names = {"--no-dev-mode", "-ndm"},
@@ -539,7 +539,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.noDevMode = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean noDevMode;
+  volatile boolean noDevMode;
 
   @CommandLine.Option(
       names = {"--dynamic-batch-size", "-dbs"},
@@ -563,7 +563,7 @@ public class StreamPerfTest implements Callable<Integer> {
     this.includeBatchSizeMetric = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
   }
 
-  boolean includeBatchSizeMetric;
+  volatile boolean includeBatchSizeMetric;
 
   static class InstanceSyncOptions {
 
