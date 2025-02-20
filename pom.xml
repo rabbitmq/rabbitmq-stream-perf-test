@@ -4,7 +4,7 @@
 
   <groupId>com.rabbitmq</groupId>
   <artifactId>stream-perf-test</artifactId>
-  <version>1.4.0-SNAPSHOT</version>
+  <version>1.5.0-SNAPSHOT</version>
 
   <name>RabbitMQ Stream Performance Testing Tool</name>
   <description>A Java-based performance testing tool for RabbitMQ Stream.</description>
