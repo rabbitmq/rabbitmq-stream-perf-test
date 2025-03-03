@@ -675,7 +675,6 @@ public class StreamPerfTest implements Callable<Integer> {
   private volatile EventLoopGroup eventLoopGroup;
 
   // constructor for completion script generation
-  @SuppressFBWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
   public StreamPerfTest() {
     this(null, null, null, null);
   }
