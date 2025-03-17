@@ -76,7 +76,7 @@
     <asciidoctorj.diagram.version>2.3.1</asciidoctorj.diagram.version>
     <spotless.version>2.44.3</spotless.version>
     <google-java-format.version>1.21.0</google-java-format.version>
-    <spotbugs-maven-plugin.version>4.9.2.0</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.9.3.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.9.3</spotbugs.version>
     <!-- for documentation -->
     <broker.version>4.0</broker.version>
