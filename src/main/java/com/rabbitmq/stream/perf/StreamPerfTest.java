@@ -260,7 +260,7 @@ public class StreamPerfTest implements Callable<Integer> {
           "leader locator strategy for created stream. "
               + "Possible values: client-local, balanced (RabbitMQ 3.10), least-leaders, random.",
       converter = Converters.LeaderLocatorTypeConverter.class,
-      defaultValue = "least-leaders")
+      defaultValue = "balanced")
   private LeaderLocator leaderLocator;
 
   @CommandLine.Option(
