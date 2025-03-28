@@ -313,7 +313,7 @@ public class StreamPerfTestTest {
             new StreamParametersBuilder()
                 .maxLengthBytes(ByteCapacity.GB(1))
                 .maxSegmentSizeBytes(ByteCapacity.MB(500))
-                .leaderLocator(LeaderLocator.LEAST_LEADERS)
+                .leaderLocator(LeaderLocator.BALANCED)
                 .build());
     assertThat(response.isOk()).isTrue();
     Future<?> run =
@@ -321,7 +321,7 @@ public class StreamPerfTestTest {
             builder()
                 .maxLengthBytes(ByteCapacity.GB(42)) // different from already existing stream
                 .streamMaxSegmentSizeBytes(ByteCapacity.MB(500))
-                .leaderLocator(LeaderLocator.LEAST_LEADERS));
+                .leaderLocator(LeaderLocator.BALANCED));
     waitOneSecond();
     run.cancel(true);
     waitRunEnds();
