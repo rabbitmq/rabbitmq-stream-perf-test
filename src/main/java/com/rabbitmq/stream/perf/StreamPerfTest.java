@@ -68,6 +68,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -668,6 +670,13 @@ public class StreamPerfTest implements Callable<Integer> {
       defaultValue = "0")
   private Duration consumerLatency;
 
+  @CommandLine.Option(
+      names = {"--pmessages", "-C"},
+      description = "producer message count, default is 0 (no limit)",
+      defaultValue = "0",
+      converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
+  private long pmessages;
+
   private MetricsCollector metricsCollector;
   private PerformanceMetrics performanceMetrics;
   private List<Monitoring> monitorings;
@@ -1046,6 +1055,16 @@ public class StreamPerfTest implements Callable<Integer> {
                 }));
       }
 
+      CompletionHandler completionHandler;
+      ConcurrentMap<String, Integer> completionReasons = new ConcurrentHashMap<>();
+      if (isRunTimeLimited() || this.pmessages > 0) {
+        completionHandler =
+            new CompletionHandler.DefaultCompletionHandler(
+                this.time, this.producers, completionReasons);
+      } else {
+        completionHandler = new CompletionHandler.NoLimitCompletionHandler(completionReasons);
+      }
+
       List<Producer> producers = Collections.synchronizedList(new ArrayList<>(this.producers));
       List<Runnable> producerRunnables =
           IntStream.range(0, this.producers)
@@ -1135,11 +1154,38 @@ public class StreamPerfTest implements Callable<Integer> {
                     } else {
                       latencyCallback = msg -> {};
                     }
+
+                    if (this.confirmLatency) {
+                      producerBuilder.confirmTimeout(Duration.ofSeconds(0));
+                    }
+
+                    Runnable messagePublishedCallback, messageConfirmedCallback;
+                    if (this.pmessages > 0) {
+                      AtomicLong messageCount = new AtomicLong(0);
+                      messagePublishedCallback =
+                          () -> {
+                            if (messageCount.incrementAndGet() == this.pmessages) {
+                              Thread.currentThread().interrupt();
+                            }
+                          };
+                      AtomicLong messageConfirmedCount = new AtomicLong(0);
+                      messageConfirmedCallback =
+                          () -> {
+                            if (messageConfirmedCount.incrementAndGet() == this.pmessages) {
+                              completionHandler.countDown("Producer reached message limit");
+                            }
+                          };
+                    } else {
+                      messagePublishedCallback = () -> {};
+                      messageConfirmedCallback = () -> {};
+                    }
+
                     ConfirmationHandler confirmationHandler =
                         confirmationStatus -> {
                           if (confirmationStatus.isConfirmed()) {
                             producerConfirm.increment();
                             latencyCallback.accept(confirmationStatus.getMessage());
+                            messageConfirmedCallback.run();
                           }
                         };
 
@@ -1164,6 +1210,7 @@ public class StreamPerfTest implements Callable<Integer> {
                               messageBuilderConsumer.accept(messageBuilder);
                               producer.send(
                                   messageBuilder.addData(payload).build(), confirmationHandler);
+                              messagePublishedCallback.run();
                             }
                           } catch (Exception e) {
                             if (e.getCause() != null
@@ -1312,12 +1359,8 @@ public class StreamPerfTest implements Callable<Integer> {
       Thread shutdownHook = new Thread(latch::countDown);
       Runtime.getRuntime().addShutdownHook(shutdownHook);
       try {
-        if (isRunTimeLimited()) {
-          boolean completed = latch.await(this.time, TimeUnit.SECONDS);
-          LOGGER.debug("Completion latch reached 0: {}", completed);
-        } else {
-          latch.await();
-        }
+        completionHandler.waitForCompletion();
+        LOGGER.debug("Completion with reason(s): {}", completionReasons);
         Runtime.getRuntime().removeShutdownHook(shutdownHook);
       } catch (InterruptedException e) {
         // moving on to the closing sequence
