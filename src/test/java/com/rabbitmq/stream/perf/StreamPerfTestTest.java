@@ -21,6 +21,8 @@ import com.rabbitmq.stream.Address;
 import com.rabbitmq.stream.AddressResolver;
 import com.rabbitmq.stream.ByteCapacity;
 import com.rabbitmq.stream.Constants;
+import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.OffsetSpecification;
 import com.rabbitmq.stream.StreamCreator.LeaderLocator;
 import com.rabbitmq.stream.compression.Compression;
 import com.rabbitmq.stream.impl.Client;
@@ -51,6 +53,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -65,6 +68,8 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 @ExtendWith(TestUtils.StreamTestInfrastructureExtension.class)
 public class StreamPerfTestTest {
@@ -527,6 +532,32 @@ public class StreamPerfTestTest {
     assertThat(consoleOutput()).containsIgnoringCase("summary:");
   }
 
+  @ParameterizedTest
+  @CsvSource({
+    "200, 1", "200, 2",
+  })
+  void shouldPublishExpectedNumberOfMessagesIfOptionIsSet(long pmessages, int producerCount)
+      throws Exception {
+    long expectedMessageCount = pmessages * producerCount;
+    run(builder().pmessages(pmessages).producers(producerCount));
+    waitUntilStreamExists(s);
+    waitRunEnds();
+    AtomicLong receivedCount = new AtomicLong();
+    AtomicLong lastCommittedChunkId = new AtomicLong();
+    try (Environment env = Environment.builder().build()) {
+      env.consumerBuilder().stream(s)
+          .offset(OffsetSpecification.first())
+          .messageHandler(
+              (ctx, msg) -> {
+                lastCommittedChunkId.set(ctx.committedChunkId());
+                receivedCount.incrementAndGet();
+              })
+          .build();
+      waitAtMost(() -> receivedCount.get() == expectedMessageCount);
+      waitAtMost(() -> lastCommittedChunkId.get() == env.queryStreamStats(s).committedChunkId());
+    }
+  }
+
   private static <T> Consumer<T> wrap(CallableConsumer<T> action) {
     return t -> {
       try {
@@ -756,6 +787,11 @@ public class StreamPerfTestTest {
 
     ArgumentsBuilder filterValues(String... values) {
       arguments.put("filter-values", String.join(",", values));
+      return this;
+    }
+
+    ArgumentsBuilder pmessages(long messages) {
+      arguments.put("pmessages", String.valueOf(messages));
       return this;
     }
 
