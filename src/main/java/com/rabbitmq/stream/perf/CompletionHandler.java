@@ -106,6 +106,6 @@ interface CompletionHandler {
   }
 
   private static void recordReason(Map<String, Integer> reasons, String reason) {
-    reasons.compute(reason, (keyReason, count) -> count == null ? 1 : ++count);
+    reasons.compute(reason, (keyReason, count) -> count == null ? 1 : count + 1);
   }
 }
