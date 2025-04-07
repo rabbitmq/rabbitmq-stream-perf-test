@@ -21,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.rabbitmq.stream.impl.Client;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.MultiThreadIoEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -234,7 +235,8 @@ final class TestUtils {
 
     @Override
     public void beforeAll(ExtensionContext context) {
-      store(context).put("nettyEventLoopGroup", new NioEventLoopGroup());
+      store(context)
+          .put("nettyEventLoopGroup", new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory()));
     }
 
     @Override

@@ -46,9 +46,10 @@ import io.netty.buffer.ByteBufAllocatorMetric;
 import io.netty.buffer.ByteBufAllocatorMetricProvider;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.MultiThreadIoEventLoopGroup;
+import io.netty.channel.epoll.EpollIoHandler;
 import io.netty.channel.epoll.EpollSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.internal.PlatformDependent;
@@ -933,10 +934,10 @@ public class StreamPerfTest implements Callable<Integer> {
 
       java.util.function.Consumer<Bootstrap> bootstrapCustomizer;
       if (this.nativeEpoll) {
-        this.eventLoopGroup = new EpollEventLoopGroup();
+        this.eventLoopGroup = new MultiThreadIoEventLoopGroup(EpollIoHandler.newFactory());
         bootstrapCustomizer = b -> b.channel(EpollSocketChannel.class);
       } else {
-        this.eventLoopGroup = new NioEventLoopGroup();
+        this.eventLoopGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
         bootstrapCustomizer = b -> {};
       }
 
