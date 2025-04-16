@@ -34,6 +34,7 @@ jobs:
           tag_name: ${{ env.tag_name }}
           target_commitish: ${{ env.release_branch }}
           prerelease: ${{ env.prerelease }}
+          token: ${{ secrets.CI_GITHUB_TOKEN }}
           repository: rabbitmq/rabbitmq-stream-perf-test
       - name: Trigger Stream Perf Test Docker image build
         uses: peter-evans/repository-dispatch@v3
