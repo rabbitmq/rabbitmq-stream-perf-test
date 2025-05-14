@@ -50,7 +50,7 @@
     <logback.version>1.5.18</logback.version>
     <netty.version>4.2.0.Final</netty.version>
     <metrics.version>4.2.30</metrics.version>
-    <micrometer.version>1.14.7</micrometer.version>
+    <micrometer.version>1.15.0</micrometer.version>
     <picocli.version>4.7.7</picocli.version>
     <guava.version>33.4.8-jre</guava.version>
     <jgroups.version>5.4.6.Final</jgroups.version>
