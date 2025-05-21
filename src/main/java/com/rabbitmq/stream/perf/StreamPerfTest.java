@@ -803,7 +803,7 @@ public class StreamPerfTest implements Callable<Integer> {
     overridePropertiesWithEnvironmentVariables();
     Codec codec = createCodec(this.codecClass);
 
-    ByteBufAllocator byteBufAllocator = ByteBufAllocator.DEFAULT;
+    ByteBufAllocator byteBufAllocator = Utils.byteBufAllocator();
 
     CompositeMeterRegistry meterRegistry = new CompositeMeterRegistry();
     meterRegistry.config().commonTags(this.metricsTags);

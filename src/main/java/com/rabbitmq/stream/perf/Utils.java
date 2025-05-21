@@ -26,6 +26,8 @@ import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.dropwizard.DropwizardConfig;
 import io.micrometer.core.instrument.dropwizard.DropwizardMeterRegistry;
 import io.micrometer.core.instrument.util.HierarchicalNameMapper;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.PooledByteBufAllocator;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -184,6 +186,10 @@ class Utils {
       ci.next();
     }
     return String.format("%.1f %cB", bytes / 1000.0, ci.current());
+  }
+
+  static ByteBufAllocator byteBufAllocator() {
+    return PooledByteBufAllocator.DEFAULT;
   }
 
   static long physicalMemory() {
