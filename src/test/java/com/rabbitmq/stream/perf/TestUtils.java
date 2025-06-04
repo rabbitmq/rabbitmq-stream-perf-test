@@ -352,8 +352,7 @@ final class TestUtils {
       return field;
     }
 
-    private static class ExecutorServiceCloseableResourceWrapper
-        implements ExtensionContext.Store.CloseableResource {
+    private static class ExecutorServiceCloseableResourceWrapper implements AutoCloseable {
 
       private final ExecutorService executorService;
 
