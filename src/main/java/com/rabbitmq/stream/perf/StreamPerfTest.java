@@ -50,6 +50,8 @@ import io.netty.channel.MultiThreadIoEventLoopGroup;
 import io.netty.channel.epoll.EpollIoHandler;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioIoHandler;
+import io.netty.channel.uring.IoUringIoHandler;
+import io.netty.channel.uring.IoUringSocketChannel;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.internal.PlatformDependent;
@@ -498,6 +500,18 @@ public class StreamPerfTest implements Callable<Integer> {
 
   volatile boolean nativeEpoll;
 
+  @CommandLine.Option(
+      names = {"--native-io-uring", "-niu"},
+      description = "use Netty's native io_uring transport (Linux x86-64 only)",
+      arity = "0..1",
+      fallbackValue = "true",
+      defaultValue = "false")
+  void setNativeIoUring(String input) throws Exception {
+    this.nativeIoUring = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  volatile boolean nativeIoUring;
+
   @ArgGroup(exclusive = false, multiplicity = "0..1")
   InstanceSyncOptions instanceSyncOptions;
 
@@ -932,10 +946,17 @@ public class StreamPerfTest implements Callable<Integer> {
         }
       }
 
+      if (this.nativeEpoll && this.nativeIoUring) {
+        throw new IllegalArgumentException("Cannot use both native epoll and io_uring");
+      }
+
       java.util.function.Consumer<Bootstrap> bootstrapCustomizer;
       if (this.nativeEpoll) {
         this.eventLoopGroup = new MultiThreadIoEventLoopGroup(EpollIoHandler.newFactory());
         bootstrapCustomizer = b -> b.channel(EpollSocketChannel.class);
+      } else if (this.nativeIoUring) {
+        this.eventLoopGroup = new MultiThreadIoEventLoopGroup(IoUringIoHandler.newFactory());
+        bootstrapCustomizer = b -> b.channel(IoUringSocketChannel.class);
       } else {
         this.eventLoopGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
         bootstrapCustomizer = b -> {};

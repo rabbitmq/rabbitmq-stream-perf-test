@@ -148,6 +148,13 @@
     </dependency>
 
     <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport-native-io_uring</artifactId>
+      <version>${netty.version}</version>
+      <classifier>linux-x86_64</classifier>
+    </dependency>
+
+    <dependency>
       <groupId>org.jgroups</groupId>
       <artifactId>jgroups</artifactId>
       <version>${jgroups.version}</version>
