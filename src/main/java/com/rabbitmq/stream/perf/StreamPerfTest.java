@@ -54,6 +54,7 @@ import io.netty.channel.uring.IoUringIoHandler;
 import io.netty.channel.uring.IoUringSocketChannel;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
+import io.netty.handler.ssl.SslProvider;
 import io.netty.util.internal.PlatformDependent;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -511,6 +512,18 @@ public class StreamPerfTest implements Callable<Integer> {
   }
 
   volatile boolean nativeIoUring;
+
+  @CommandLine.Option(
+      names = {"--tls-tcnative", "-ttc"},
+      description = "use Netty's tcnative with BoringSSL (Linux x86-64 only)",
+      arity = "0..1",
+      fallbackValue = "true",
+      defaultValue = "false")
+  void setTlsTcNative(String input) throws Exception {
+    this.tlsTcNative = Converters.BOOLEAN_TYPE_CONVERTER.convert(input);
+  }
+
+  volatile boolean tlsTcNative;
 
   @ArgGroup(exclusive = false, multiplicity = "0..1")
   InstanceSyncOptions instanceSyncOptions;
@@ -1003,10 +1016,12 @@ public class StreamPerfTest implements Callable<Integer> {
       java.util.function.Consumer<io.netty.channel.Channel> channelCustomizer = channel -> {};
 
       if (tls) {
+        SslProvider sslProvider = this.tlsTcNative ? SslProvider.OPENSSL : SslProvider.JDK;
         TlsConfiguration tlsConfiguration = environmentBuilder.tls();
         tlsConfiguration =
             tlsConfiguration.sslContext(
                 SslContextBuilder.forClient()
+                    .sslProvider(sslProvider)
                     .trustManager(Utils.TRUST_EVERYTHING_TRUST_MANAGER)
                     .build());
         environmentBuilder = tlsConfiguration.environmentBuilder();

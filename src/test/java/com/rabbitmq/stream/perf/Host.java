@@ -94,7 +94,7 @@ final class Host {
   }
 
   static String rabbitmqctlCommand() {
-    String rabbitmqCtl = System.getProperty("rabbitmqctl.bin", DOCKER_PREFIX);
+    String rabbitmqCtl = System.getProperty("rabbitmqctl.bin", DOCKER_PREFIX + "rabbitmq");
     if (rabbitmqCtl.startsWith(DOCKER_PREFIX)) {
       String containerId = rabbitmqCtl.split(":")[1];
       return "docker exec " + containerId + " rabbitmqctl";

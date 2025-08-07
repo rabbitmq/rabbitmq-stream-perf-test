@@ -70,6 +70,7 @@ import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @ExtendWith(TestUtils.StreamTestInfrastructureExtension.class)
 public class StreamPerfTestTest {
@@ -285,12 +286,14 @@ public class StreamPerfTestTest {
     waitRunEnds();
   }
 
-  @Test
+  @ParameterizedTest
+  @ValueSource(booleans = {true, false})
   @DisabledIfTlsNotEnabled
-  void shouldConnectWithTls() throws Exception {
+  void shouldConnectWithTls(boolean tlsTcNative) throws Exception {
+    ArgumentsBuilder builder = builder().tlsTcNative(tlsTcNative);
     Future<?> run =
         run(
-            builder()
+            builder
                 .uris("rabbitmq-stream+tls://guest:guest@localhost:5551/%2f")
                 .serverNameIndication("localhost"));
     waitUntilStreamExists(s);
@@ -638,6 +641,11 @@ public class StreamPerfTestTest {
 
     ArgumentsBuilder uris(String url) {
       arguments.put("uris", url);
+      return this;
+    }
+
+    public ArgumentsBuilder tlsTcNative(boolean tlsTcNative) {
+      arguments.put("tls-tcnative", String.valueOf(tlsTcNative));
       return this;
     }
 
