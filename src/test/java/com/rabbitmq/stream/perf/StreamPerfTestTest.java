@@ -522,6 +522,18 @@ public class StreamPerfTestTest {
   }
 
   @Test
+  @EnabledOnOs(OS.LINUX)
+  @EnabledIfSystemProperty(named = "os.arch", matches = "amd64")
+  void nativeIoUringWorksOnLinux() throws Exception {
+    Future<?> run = run(builder().nativeEpoll());
+    waitUntilStreamExists(s);
+    waitOneSecond();
+    run.cancel(true);
+    waitRunEnds();
+    assertThat(streamExists(s)).isTrue();
+  }
+
+  @Test
   @BrokerVersionAtLeast(BrokerVersion.RABBITMQ_3_13_0)
   void shouldNotFailWhenFilteringIsActivated() throws Exception {
     Future<?> run = run(builder().filterValueSet("1..15").filterValues("4"));
@@ -777,6 +789,11 @@ public class StreamPerfTestTest {
 
     ArgumentsBuilder nativeEpoll() {
       arguments.put("native-epoll", "");
+      return this;
+    }
+
+    ArgumentsBuilder nativeIoUring() {
+      arguments.put("native-io-uring", "");
       return this;
     }
 
