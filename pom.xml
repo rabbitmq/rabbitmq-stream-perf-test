@@ -49,6 +49,7 @@
     <slf4j.version>2.0.17</slf4j.version>
     <logback.version>1.5.18</logback.version>
     <netty.version>4.2.3.Final</netty.version>
+    <netty-tcnative.version>2.0.72.Final</netty-tcnative.version>
     <metrics.version>4.2.33</metrics.version>
     <micrometer.version>1.15.2</micrometer.version>
     <picocli.version>4.7.7</picocli.version>
@@ -155,6 +156,13 @@
     </dependency>
 
     <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-tcnative-boringssl-static</artifactId>
+      <version>${netty-tcnative.version}</version>
+      <classifier>linux-x86_64</classifier>
+    </dependency>
+
+    <dependency>
       <groupId>org.jgroups</groupId>
       <artifactId>jgroups</artifactId>
       <version>${jgroups.version}</version>
@@ -202,6 +210,14 @@
       <artifactId>spotbugs-annotations</artifactId>
       <version>${spotbugs.version}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-tcnative-boringssl-static</artifactId>
+      <version>${netty-tcnative.version}</version>
+      <classifier>osx-aarch_64</classifier>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
