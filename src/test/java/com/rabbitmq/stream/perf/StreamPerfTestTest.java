@@ -573,6 +573,20 @@ public class StreamPerfTestTest {
     }
   }
 
+  @ParameterizedTest
+  @CsvSource({"100, 1", "100, 2"})
+  void shouldConsumeExpectedNumberOfMessagesIfOptionIsSet(long cmessages, int consumerCount)
+      throws Exception {
+    run(
+        builder()
+            .cmessages(cmessages)
+            .consumers(consumerCount)
+            .producers(1)
+            .pmessages(cmessages * 2));
+    waitUntilStreamExists(s);
+    waitRunEnds();
+  }
+
   private static <T> Consumer<T> wrap(CallableConsumer<T> action) {
     return t -> {
       try {
@@ -817,6 +831,11 @@ public class StreamPerfTestTest {
 
     ArgumentsBuilder pmessages(long messages) {
       arguments.put("pmessages", String.valueOf(messages));
+      return this;
+    }
+
+    ArgumentsBuilder cmessages(long messages) {
+      arguments.put("cmessages", String.valueOf(messages));
       return this;
     }
 

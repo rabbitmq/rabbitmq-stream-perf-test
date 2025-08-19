@@ -705,6 +705,13 @@ public class StreamPerfTest implements Callable<Integer> {
       converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
   private long pmessages;
 
+  @CommandLine.Option(
+      names = {"--cmessages", "-D"},
+      description = "consumer message count, default is 0 (no limit)",
+      defaultValue = "0",
+      converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
+  private long cmessages;
+
   private MetricsCollector metricsCollector;
   private PerformanceMetrics performanceMetrics;
   private List<Monitoring> monitorings;
@@ -1094,10 +1101,12 @@ public class StreamPerfTest implements Callable<Integer> {
 
       CompletionHandler completionHandler;
       ConcurrentMap<String, Integer> completionReasons = new ConcurrentHashMap<>();
-      if (isRunTimeLimited() || this.pmessages > 0) {
+      if (isRunTimeLimited() || this.pmessages > 0 || this.cmessages > 0) {
+        int countLimit = this.pmessages > 0 ? this.producers : 0;
+        countLimit += this.cmessages > 0 ? this.consumers : 0;
         completionHandler =
             new CompletionHandler.DefaultCompletionHandler(
-                this.time, this.producers, completionReasons);
+                this.time, countLimit, completionReasons);
       } else {
         completionHandler = new CompletionHandler.NoLimitCompletionHandler(completionReasons);
       }
@@ -1319,6 +1328,20 @@ public class StreamPerfTest implements Callable<Integer> {
                                   .builder();
                         }
 
+                        java.util.function.Consumer<MessageHandler.Context> messageReceivedCallback;
+                        if (this.cmessages > 0) {
+                          AtomicLong messageCount = new AtomicLong(0);
+                          messageReceivedCallback =
+                              ctx -> {
+                                if (messageCount.incrementAndGet() == this.cmessages) {
+                                  completionHandler.countDown("Consumer reached message limit");
+                                  ctx.consumer().close();
+                                }
+                              };
+                        } else {
+                          messageReceivedCallback = ctx -> {};
+                        }
+
                         Runnable latencyWorker = Utils.latencyWorker(this.consumerLatency);
                         consumerBuilder =
                             consumerBuilder.messageHandler(
@@ -1333,6 +1356,7 @@ public class StreamPerfTest implements Callable<Integer> {
                                     // tool
                                   }
                                   metrics.offset(context.offset());
+                                  messageReceivedCallback.accept(context);
                                   latencyWorker.run();
                                 });
 
