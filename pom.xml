@@ -62,7 +62,7 @@
     <spotless.check.skip>true</spotless.check.skip>
     <commons-lang3.version>3.13.0</commons-lang3.version>
     <commons-codec.version>1.16.0</commons-codec.version>
-    <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
+    <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
     <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
     <spring-boot-maven-plugin.version>2.7.18</spring-boot-maven-plugin.version>
     <checksum.maven.plugin.version>1.11</checksum.maven.plugin.version>
