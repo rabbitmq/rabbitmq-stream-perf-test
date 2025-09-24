@@ -175,7 +175,7 @@ final class Converters {
           credits = new int[] {initialCredits, initialCredits / 2};
         }
         return new Credits(credits[0], credits[1]);
-      } catch (Exception e) {
+      } catch (RuntimeException e) {
         throw new CommandLine.TypeConversionException(
             "'" + input + "' is not valid, valid example values: 10-5, 5-2");
       }
