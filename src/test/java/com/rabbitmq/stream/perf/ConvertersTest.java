@@ -225,6 +225,23 @@ public class ConvertersTest {
         .hasMessageContaining("valid");
   }
 
+  @ParameterizedTest
+  @CsvSource({"10-5,10,5", "5-2,5,2", "10,10,5", "5,5,2", "0,0,0"})
+  void creditsTypeConverterOk(String value, int initialCredits, int n) {
+    Converters.CreditsTypeConverter converter = new Converters.CreditsTypeConverter();
+    Converters.Credits credits = converter.convert(value);
+    assertThat(credits.initialCredits()).isEqualTo(initialCredits);
+    assertThat(credits.n()).isEqualTo(n);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"a", "1-", ""})
+  void creditsTypeConverterKo(String value) {
+    Converters.CreditsTypeConverter converter = new Converters.CreditsTypeConverter();
+    assertThatThrownBy(() -> converter.convert(value))
+        .isInstanceOfAny(IllegalArgumentException.class, CommandLine.TypeConversionException.class);
+  }
+
   private static Tag tag(String key, String value) {
     return Tag.of(key, value);
   }

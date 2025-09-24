@@ -142,13 +142,42 @@ final class Converters {
     @Override
     public Integer convert(String input) {
       try {
-        Integer value = Integer.valueOf(input);
+        int value = Integer.parseInt(input);
         if (value < 0) {
           throw new IllegalArgumentException();
         }
         return value;
       } catch (Exception e) {
         throw new CommandLine.TypeConversionException(input + " is not a non-negative integer");
+      }
+    }
+  }
+
+  static class CreditsTypeConverter implements CommandLine.ITypeConverter<Credits> {
+
+    @Override
+    public Credits convert(String input) {
+      try {
+        int[] credits;
+        if (input.contains("-")) {
+          String[] creditsStr = input.split("-");
+          int initialCredits = Integer.parseInt(creditsStr[0]);
+          int n = Integer.parseInt(creditsStr[1]);
+          if (initialCredits < 0 || n < 0) {
+            throw new IllegalArgumentException();
+          }
+          credits = new int[] {initialCredits, n};
+        } else {
+          int initialCredits = Integer.parseInt(input);
+          if (initialCredits < 0) {
+            throw new IllegalArgumentException();
+          }
+          credits = new int[] {initialCredits, initialCredits / 2};
+        }
+        return new Credits(credits[0], credits[1]);
+      } catch (Exception e) {
+        throw new CommandLine.TypeConversionException(
+            "'" + input + "' is not valid, valid example values: 10-5, 5-2");
       }
     }
   }
@@ -450,5 +479,24 @@ final class Converters {
 
   private static void throwConversionException(String format, String... arguments) {
     throw new CommandLine.TypeConversionException(String.format(format, (Object[]) arguments));
+  }
+
+  static class Credits {
+
+    private final int initialCredits;
+    private final int n;
+
+    Credits(int initialCredits, int n) {
+      this.initialCredits = initialCredits;
+      this.n = n;
+    }
+
+    int initialCredits() {
+      return this.initialCredits;
+    }
+
+    int n() {
+      return this.n;
+    }
   }
 }

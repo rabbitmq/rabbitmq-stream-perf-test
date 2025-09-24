@@ -31,6 +31,7 @@ import com.rabbitmq.stream.compression.Compression;
 import com.rabbitmq.stream.impl.Client;
 import com.rabbitmq.stream.impl.ClientProperties;
 import com.rabbitmq.stream.metrics.MetricsCollector;
+import com.rabbitmq.stream.perf.Converters.Credits;
 import com.rabbitmq.stream.perf.ShutdownService.CloseCallback;
 import com.rabbitmq.stream.perf.Utils.NamedThreadFactory;
 import com.rabbitmq.stream.perf.Utils.PerformanceMicrometerMetricsCollector;
@@ -647,6 +648,13 @@ public class StreamPerfTest implements Callable<Integer> {
       defaultValue = "10",
       converter = Converters.NotNegativeIntegerTypeConverter.class)
   private int initialCredits;
+
+  @CommandLine.Option(
+      names = {"--credits"},
+      description = "initial credits and credits to grant every n chunks (e.g. 10-5)",
+      defaultValue = "0",
+      converter = Converters.CreditsTypeConverter.class)
+  private Credits credits;
 
   @CommandLine.Option(
       names = {"--heartbeat", "-b"},
@@ -1309,12 +1317,17 @@ public class StreamPerfTest implements Callable<Integer> {
 
                         String stream = stream(streams, i);
                         ConsumerBuilder consumerBuilder =
-                            environment
-                                .consumerBuilder()
-                                .offset(this.offset)
-                                .flow()
-                                .initialCredits(this.initialCredits)
-                                .builder();
+                            environment.consumerBuilder().offset(this.offset);
+
+                        if (this.credits.initialCredits() > 0) {
+                          consumerBuilder
+                              .flow()
+                              .strategy(
+                                  ConsumerFlowStrategy.creditEveryNthChunk(
+                                      this.credits.initialCredits(), this.credits.n()));
+                        } else {
+                          consumerBuilder.flow().initialCredits(this.initialCredits);
+                        }
 
                         if (this.superStreams) {
                           consumerBuilder.superStream(stream);
