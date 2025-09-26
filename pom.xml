@@ -76,7 +76,7 @@
     <asciidoctorj.version>3.0.0</asciidoctorj.version>
     <asciidoctorj.diagram.version>3.0.1</asciidoctorj.diagram.version>
     <spotless.version>3.0.0</spotless.version>
-    <google-java-format.version>1.21.0</google-java-format.version>
+    <google-java-format.version>1.28.0</google-java-format.version>
     <spotbugs-maven-plugin.version>4.9.6.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.9.6</spotbugs.version>
     <!-- for documentation -->
@@ -217,6 +217,14 @@
       <artifactId>netty-tcnative-boringssl-static</artifactId>
       <version>${netty-tcnative.version}</version>
       <classifier>osx-aarch_64</classifier>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- add explicitly to update automatically with dependabot -->
+    <dependency>
+      <groupId>com.google.googlejavaformat</groupId>
+      <artifactId>google-java-format</artifactId>
+      <version>${google-java-format.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -406,6 +414,7 @@
               <version>${google-java-format.version}</version>
               <style>GOOGLE</style>
             </googleJavaFormat>
+            <removeUnusedImports />
           </java>
 <!--          <ratchetFrom>origin/main</ratchetFrom>-->
           <licenseHeader> <!-- specify either content or file, but not both -->
