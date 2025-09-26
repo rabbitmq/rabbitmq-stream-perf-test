@@ -29,7 +29,14 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -393,14 +400,13 @@ final class Converters {
       implements CommandLine.ITypeConverter<OffsetSpecification> {
 
     private static final Map<String, OffsetSpecification> SPECS =
-        Collections.unmodifiableMap(
-            new HashMap<String, OffsetSpecification>() {
-              {
-                put("first", OffsetSpecification.first());
-                put("last", OffsetSpecification.last());
-                put("next", OffsetSpecification.next());
-              }
-            });
+        Map.of(
+            "first",
+            OffsetSpecification.first(),
+            "last",
+            OffsetSpecification.last(),
+            "next",
+            OffsetSpecification.next());
 
     @Override
     public OffsetSpecification convert(String value) throws Exception {
