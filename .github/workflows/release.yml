@@ -37,7 +37,7 @@ jobs:
           token: ${{ secrets.CI_GITHUB_TOKEN }}
           repository: rabbitmq/rabbitmq-stream-perf-test
       - name: Trigger Stream Perf Test Docker image build
-        uses: peter-evans/repository-dispatch@v3
+        uses: peter-evans/repository-dispatch@v4
         with:
           event-type: new_release
           client-payload: >-
