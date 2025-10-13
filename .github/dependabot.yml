@@ -8,6 +8,8 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 20
     ignore:
+      - dependency-name: "org.jgroups:jgroups"
+        versions: ["[5.5,)"]
       - dependency-name: "org.springframework.boot:spring-boot-maven-plugin"
         versions: ["[3.0,)"]
       - dependency-name: "org.junit:*"
