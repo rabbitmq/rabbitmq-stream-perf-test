@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
@@ -45,7 +45,7 @@ jobs:
             "url" : "https://github.com/rabbitmq/rabbitmq-stream-perf-test/releases/download/v${{ env.release_version }}/stream-perf-test-${{ env.release_version }}.jar",
             "tags": "pivotalrabbitmq/stream-perf-test:latest,pivotalrabbitmq/stream-perf-test:${{ env.release_version }}"}
       - name: Checkout tls-gen
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/tls-gen
           path: './tls-gen'
