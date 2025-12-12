@@ -450,16 +450,13 @@ public class StreamPerfTestTest {
   }
 
   @Test
-  void confirmLatencyShouldBeIncluded() throws Exception {
+  void confirmLatencyShouldNotBeIncludedByDefault() throws Exception {
     Future<?> run = run(builder());
     waitUntilStreamExists(s);
     waitOneSecond();
     run.cancel(true);
     waitRunEnds();
-    assertThat(consoleOutput())
-        .contains("latency 95th")
-        .doesNotContain("latency 95th 0 ms")
-        .doesNotContain("confirm latency");
+    assertThat(consoleOutput()).contains("latency 95th").doesNotContain("confirm latency");
   }
 
   @Test
