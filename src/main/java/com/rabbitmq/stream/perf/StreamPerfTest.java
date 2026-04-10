@@ -222,6 +222,12 @@ public class StreamPerfTest implements Callable<Integer> {
   private int rate;
 
   @CommandLine.Option(
+      names = {"--consumer-rate", "-R"},
+      description = "maximum rate of consumed messages",
+      defaultValue = "-1")
+  private int consumerRate;
+
+  @CommandLine.Option(
       names = {"--batch-size", "-bs"},
       description = "size of a batch of published messages",
       defaultValue = "100",
@@ -1405,6 +1411,13 @@ public class StreamPerfTest implements Callable<Integer> {
                         }
 
                         Runnable latencyWorker = Utils.latencyWorker(this.consumerLatency);
+                        Runnable consumerRateLimiterCallback;
+                        if (this.consumerRate > 0) {
+                          RateLimiter rateLimiter = RateLimiter.create(this.consumerRate);
+                          consumerRateLimiterCallback = () -> rateLimiter.acquire(1);
+                        } else {
+                          consumerRateLimiterCallback = () -> {};
+                        }
                         consumerBuilder =
                             consumerBuilder.messageHandler(
                                 (context, message) -> {
@@ -1412,6 +1425,7 @@ public class StreamPerfTest implements Callable<Integer> {
                                   metrics.offset(context.offset());
                                   messageReceivedCallback.accept(context);
                                   latencyWorker.run();
+                                  consumerRateLimiterCallback.run();
                                 });
 
                         consumerBuilder = maybeConfigureForFiltering(consumerBuilder);
