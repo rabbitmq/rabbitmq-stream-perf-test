@@ -297,6 +297,13 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>${maven.jar.plugin.version}</version>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Enable-Final-Field-Mutation>ALL-UNNAMED</Enable-Final-Field-Mutation>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
 
       <plugin>
