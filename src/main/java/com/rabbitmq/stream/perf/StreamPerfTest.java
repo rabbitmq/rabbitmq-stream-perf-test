@@ -1366,12 +1366,29 @@ public class StreamPerfTest implements Callable<Integer> {
                         if (this.singleActiveConsumer) {
                           consumerBuilder.singleActiveConsumer();
                           // single active consumer requires a name
-                          if (this.storeEvery == 0) {
-                            this.storeEvery = 10_000;
+                          String consumerName = this.consumerNameStrategy.apply(stream, i + 1);
+                          if (this.storeEvery > 0) {
+                            consumerBuilder =
+                                consumerBuilder
+                                    .name(consumerName)
+                                    .autoTrackingStrategy()
+                                    .messageCountBeforeStorage(this.storeEvery)
+                                    .builder();
+                          } else {
+                            // Use noTrackingStrategy to avoid a NPE in the stream-client library
+                            // when shutting down. Provide a consumer update listener that returns
+                            // the initial offset when going active so the broker gets a non-null
+                            // response (returning null can delay broker-side SAC processing).
+                            OffsetSpecification sacOffsetSpec = this.offset;
+                            consumerBuilder =
+                                consumerBuilder
+                                    .name(consumerName)
+                                    .noTrackingStrategy()
+                                    .consumerUpdateListener(
+                                        context ->
+                                            context.isActive() ? sacOffsetSpec : null);
                           }
-                        }
-
-                        if (this.storeEvery > 0) {
+                        } else if (this.storeEvery > 0) {
                           String consumerName = this.consumerNameStrategy.apply(stream, i + 1);
                           consumerBuilder =
                               consumerBuilder
