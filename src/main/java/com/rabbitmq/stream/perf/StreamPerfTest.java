@@ -44,6 +44,7 @@ import com.rabbitmq.stream.ProducerBuilder;
 import com.rabbitmq.stream.StreamCreator;
 import com.rabbitmq.stream.StreamCreator.LeaderLocator;
 import com.rabbitmq.stream.StreamException;
+import com.rabbitmq.stream.codec.InternalCodec;
 import com.rabbitmq.stream.codec.QpidProtonCodec;
 import com.rabbitmq.stream.codec.SimpleCodec;
 import com.rabbitmq.stream.compression.Compression;
@@ -128,6 +129,7 @@ public class StreamPerfTest implements Callable<Integer> {
   private static final Map<String, String> CODEC_ALIASES =
       new HashMap<>() {
         {
+          put("internal", InternalCodec.class.getName());
           put("qpid", QpidProtonCodec.class.getName());
           put("simple", SimpleCodec.class.getName());
         }
@@ -258,8 +260,8 @@ public class StreamPerfTest implements Callable<Integer> {
 
   @CommandLine.Option(
       names = {"--codec", "-cc"},
-      description = "class of codec to use. Aliases: qpid, simple.",
-      defaultValue = "qpid")
+      description = "class of codec to use. Aliases: internal, qpid, simple.",
+      defaultValue = "internal")
   private String codecClass;
 
   @CommandLine.Option(
@@ -1170,6 +1172,7 @@ public class StreamPerfTest implements Callable<Integer> {
                     }
 
                     String stream = stream(this.streams, i);
+                    @SuppressWarnings("deprecation")
                     ProducerBuilder producerBuilder =
                         environment
                             .producerBuilder()
