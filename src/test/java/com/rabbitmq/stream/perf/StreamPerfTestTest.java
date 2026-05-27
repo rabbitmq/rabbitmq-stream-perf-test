@@ -45,6 +45,8 @@ import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -186,6 +188,22 @@ public class StreamPerfTestTest {
   void versionShouldReturnAppropriateInformation() {
     StreamPerfTest.versionInformation(new PrintWriter(out, true));
     assertThat(consoleOutput()).contains("RabbitMQ Stream Perf Test");
+  }
+
+  @Test
+  void metricsFormatCompact() throws Exception {
+    Future<?> run = run(builder().metricsFormatCompact());
+    waitUntilStreamExists(s);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    String today = LocalDateTime.now().format(formatter);
+    waitAtMost(() -> consoleOutput().contains(today));
+    run.cancel(true);
+    waitRunEnds();
+    assertThat(consoleOutput())
+        .contains("time") // header
+        .contains(today) // line
+        .contains("msg/s") // line
+        .contains("Summary: "); // regular summary
   }
 
   @Test
@@ -833,6 +851,11 @@ public class StreamPerfTestTest {
 
     ArgumentsBuilder cmessages(long messages) {
       arguments.put("cmessages", String.valueOf(messages));
+      return this;
+    }
+
+    ArgumentsBuilder metricsFormatCompact() {
+      arguments.put("metrics-format", "compact");
       return this;
     }
 

@@ -55,6 +55,10 @@ import com.rabbitmq.stream.perf.Converters.Credits;
 import com.rabbitmq.stream.perf.ShutdownService.CloseCallback;
 import com.rabbitmq.stream.perf.Utils.NamedThreadFactory;
 import com.rabbitmq.stream.perf.Utils.PerformanceMicrometerMetricsCollector;
+import com.rabbitmq.stream.perf.metrics.DefaultPerformanceMetrics;
+import com.rabbitmq.stream.perf.metrics.MetricsFormatter;
+import com.rabbitmq.stream.perf.metrics.MetricsUtils;
+import com.rabbitmq.stream.perf.metrics.PerformanceMetrics;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
@@ -759,6 +763,12 @@ public class StreamPerfTest implements Callable<Integer> {
       converter = Converters.GreaterThanOrEqualToZeroIntegerTypeConverter.class)
   private long cmessages;
 
+  @CommandLine.Option(
+      names = {"--metrics-format", "-mf"},
+      description = "metrics format to use on the console, possible values are default and compact",
+      defaultValue = "default")
+  private MetricsFormatter.MetricsFormat metricsFormat;
+
   private MetricsCollector metricsCollector;
   private PerformanceMetrics performanceMetrics;
   private List<Monitoring> monitorings;
@@ -805,7 +815,10 @@ public class StreamPerfTest implements Callable<Integer> {
     StreamPerfTest streamPerfTest =
         new StreamPerfTest(args, consoleOut, consoleErr, addressResolver);
     CommandLine commandLine =
-        new CommandLine(streamPerfTest).setOut(streamPerfTest.out).setErr(streamPerfTest.err);
+        new CommandLine(streamPerfTest)
+            .setOut(streamPerfTest.out)
+            .setErr(streamPerfTest.err)
+            .setCaseInsensitiveEnumValuesAllowed(true);
 
     List<Monitoring> monitorings =
         Arrays.asList(new DebugEndpointMonitoring(), new PrometheusEndpointMonitoring());
@@ -955,7 +968,7 @@ public class StreamPerfTest implements Callable<Integer> {
 
       if (meterRegistry.getRegistries().isEmpty()) {
         // we need at least one to do the calculations
-        meterRegistry.add(Utils.dropwizardMeterRegistry());
+        meterRegistry.add(MetricsUtils.dropwizardMeterRegistry());
       }
 
       this.performanceMetrics =
@@ -967,6 +980,7 @@ public class StreamPerfTest implements Callable<Integer> {
               this.includeBatchSizeMetric,
               this.confirmLatency,
               memoryReportSupplier,
+              this.metricsFormat,
               this.out);
 
       ScheduledExecutorService envExecutor =
