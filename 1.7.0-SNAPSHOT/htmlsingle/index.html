@@ -529,7 +529,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <h1>RabbitMQ Stream PerfTest</h1>
 <div class="details">
 <span id="revnumber">version 1.7.0-SNAPSHOT</span>
-<br><span id="revremark">(1221eff)</span>
+<br><span id="revremark">(945d994)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -556,6 +556,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#unconfirmed-messages">Unconfirmed Messages</a></li>
 <li><a href="#message-size">Message Size</a></li>
 <li><a href="#performance-tool-connection-pooling">Connection Pooling</a></li>
+<li><a href="#console-output-format">Console Output Format</a></li>
 </ul>
 </li>
 <li><a href="#advanced-usage">Advanced Usage</a>
@@ -1065,6 +1066,41 @@ As the rate is low, we can re-use connections:</p>
 <p>We end up using 2 connections for the producers and consumers with connection pooling, instead of 20.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="console-output-format"><a class="anchor" href="#console-output-format"></a>Console Output Format</h3>
+<div class="paragraph">
+<p>Stream PerfTest default console output format is explicit as each line contains a label for each value:</p>
+</div>
+<div class="listingblock">
+<div class="title">The <code>default</code> output format</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">1, published 1653063 msg/s, confirmed 1643806 msg/s, consumed 1643113 msg/s, latency median/75th/95th/99th 8/42/88/92 ms, chunk size 2232
+2, published 1800068 msg/s, confirmed 1799370 msg/s, consumed 1798018 msg/s, latency median/75th/95th/99th 5/6/8/9 ms, chunk size 2679
+3, published 1830086 msg/s, confirmed 1830086 msg/s, consumed 1832134 msg/s, latency median/75th/95th/99th 5/6/8/9 ms, chunk size 2885
+4, published 1838454 msg/s, confirmed 1838843 msg/s, consumed 1840621 msg/s, latency median/75th/95th/99th 5/6/8/9 ms, chunk size 2972
+5, published 1842712 msg/s, confirmed 1842323 msg/s, consumed 1840545 msg/s, latency median/75th/95th/99th 5/6/8/9 ms, chunk size 3040
+
+Summary: published 1791284 msg/s, confirmed 1789286 msg/s, consumed 1789286 msg/s, latency 95th 8 ms, chunk size 3042</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Advanced users who prefer a more compact format can use the <code>--metrics-format compact</code> option (<code>-mf compact</code> for short).
+The output looks like the following then:</p>
+</div>
+<div class="listingblock">
+<div class="title">The <code>compact</code> output format</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">time                     published      confirmed       consumed           latency  chunk size
+2026/05/28 08:39:11  1659040 msg/s  1649090 msg/s  1649090 msg/s      7/9/50/54 ms        3321
+2026/05/28 08:39:12  1835208 msg/s  1835548 msg/s  1835548 msg/s       5/6/8/10 ms        3386
+2026/05/28 08:39:13  1851399 msg/s  1851727 msg/s  1852172 msg/s        5/6/8/9 ms        3420
+2026/05/28 08:39:14  1869369 msg/s  1868700 msg/s  1868842 msg/s       5/6/8/10 ms        3463
+2026/05/28 08:39:15  1873215 msg/s  1877256 msg/s  1876897 msg/s        5/6/8/9 ms        3447
+
+Summary: published 1816941 msg/s, confirmed 1815234 msg/s, consumed 1815234 msg/s, latency 95th 8 ms, chunk size 3447</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1544,7 +1580,7 @@ Use the <code>rabbitmq.streamperftest.loggers</code> system property with <code>
 <div id="footer">
 <div id="footer-text">
 Version 1.7.0-SNAPSHOT<br>
-Last updated 2026-05-28 06:22:59 UTC
+Last updated 2026-05-28 09:09:50 UTC
 </div>
 </div>
 </body>
