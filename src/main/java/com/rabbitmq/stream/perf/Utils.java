@@ -16,16 +16,12 @@ package com.rabbitmq.stream.perf;
 
 import static java.time.Duration.ofSeconds;
 
-import com.codahale.metrics.MetricRegistry;
 import com.rabbitmq.stream.metrics.MicrometerMetricsCollector;
 import com.sun.management.OperatingSystemMXBean;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.DistributionSummary;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
-import io.micrometer.core.instrument.dropwizard.DropwizardConfig;
-import io.micrometer.core.instrument.dropwizard.DropwizardMeterRegistry;
-import io.micrometer.core.instrument.util.HierarchicalNameMapper;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
 import java.io.PrintWriter;
@@ -413,34 +409,6 @@ class Utils {
     public void chunk(int entriesCount) {
       this.chunkSize.record(entriesCount);
     }
-  }
-
-  static DropwizardMeterRegistry dropwizardMeterRegistry() {
-    DropwizardConfig dropwizardConfig =
-        new DropwizardConfig() {
-          @Override
-          public String prefix() {
-            return "";
-          }
-
-          @Override
-          public String get(String key) {
-            return null;
-          }
-        };
-    MetricRegistry metricRegistry = new MetricRegistry();
-    DropwizardMeterRegistry dropwizardMeterRegistry =
-        new DropwizardMeterRegistry(
-            dropwizardConfig,
-            metricRegistry,
-            HierarchicalNameMapper.DEFAULT,
-            io.micrometer.core.instrument.Clock.SYSTEM) {
-          @Override
-          protected Double nullGaugeValue() {
-            return Double.NaN;
-          }
-        };
-    return dropwizardMeterRegistry;
   }
 
   @SuppressWarnings("unchecked")

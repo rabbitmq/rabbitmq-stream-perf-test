@@ -12,11 +12,11 @@
 //
 // If you have any questions regarding licensing, please contact us at
 // info@rabbitmq.com.
-package com.rabbitmq.stream.perf;
+package com.rabbitmq.stream.perf.metrics;
 
 import java.util.concurrent.TimeUnit;
 
-interface PerformanceMetrics extends AutoCloseable {
+public interface PerformanceMetrics extends AutoCloseable {
 
   void start(String description) throws Exception;
 

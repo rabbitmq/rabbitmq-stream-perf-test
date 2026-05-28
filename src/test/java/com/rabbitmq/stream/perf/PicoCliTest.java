@@ -195,7 +195,7 @@ public class PicoCliTest {
 
   StreamPerfTest exec(String line) {
     StreamPerfTest app = new StreamPerfTest();
-    CommandLine commandLine = new CommandLine(app);
+    CommandLine commandLine = new CommandLine(app).setCaseInsensitiveEnumValuesAllowed(true);
     commandLine.parseArgs(line.isBlank() ? new String[0] : args(line));
     return app;
   }
