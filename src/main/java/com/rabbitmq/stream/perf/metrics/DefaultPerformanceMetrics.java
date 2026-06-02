@@ -319,21 +319,25 @@ public final class DefaultPerformanceMetrics implements PerformanceMetrics {
 
   @Override
   public void latency(long latency, TimeUnit unit) {
-    long count = this.latencyCallCount.incrementAndGet();
-    if (this.lastConsumedRate.get() < LATENCY_RECORDING_RATE_LIMIT) {
-      this.latency.record(latency, unit);
-    } else if (count % LATENCY_DOWNSAMPLING == 0) {
-      this.latency.record(latency, unit);
+    if (latency >= 0) {
+      long count = this.latencyCallCount.incrementAndGet();
+      if (this.lastConsumedRate.get() < LATENCY_RECORDING_RATE_LIMIT) {
+        this.latency.record(latency, unit);
+      } else if (count % LATENCY_DOWNSAMPLING == 0) {
+        this.latency.record(latency, unit);
+      }
     }
   }
 
   @Override
   public void confirmLatency(long latency, TimeUnit unit) {
-    long count = this.confirmLatencyCallCount.incrementAndGet();
-    if (this.lastConfirmedRate.get() < LATENCY_RECORDING_RATE_LIMIT) {
-      this.confirmLatency.record(latency, unit);
-    } else if (count % LATENCY_DOWNSAMPLING == 0) {
-      this.confirmLatency.record(latency, unit);
+    if (latency >= 0) {
+      long count = this.confirmLatencyCallCount.incrementAndGet();
+      if (this.lastConfirmedRate.get() < LATENCY_RECORDING_RATE_LIMIT) {
+        this.confirmLatency.record(latency, unit);
+      } else if (count % LATENCY_DOWNSAMPLING == 0) {
+        this.confirmLatency.record(latency, unit);
+      }
     }
   }
 
