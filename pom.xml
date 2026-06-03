@@ -48,7 +48,7 @@
     <stream-client.version>1.8.0-SNAPSHOT</stream-client.version>
     <slf4j.version>2.0.18</slf4j.version>
     <logback.version>1.5.33</logback.version>
-    <netty.version>4.2.14.Final</netty.version>
+    <netty.version>4.2.15.Final</netty.version>
     <netty-tcnative.version>2.0.77.Final</netty-tcnative.version>
     <metrics.version>4.2.39</metrics.version>
     <micrometer.version>1.16.5</micrometer.version>
