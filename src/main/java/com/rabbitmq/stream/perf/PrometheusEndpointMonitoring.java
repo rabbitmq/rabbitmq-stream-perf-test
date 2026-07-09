@@ -14,13 +14,14 @@
 // info@rabbitmq.com.
 package com.rabbitmq.stream.perf;
 
+import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
 import io.micrometer.prometheusmetrics.PrometheusConfig;
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import picocli.CommandLine.Option;
 
-class PrometheusEndpointMonitoring implements Monitoring {
+final class PrometheusEndpointMonitoring implements Monitoring {
 
   @Option(
       names = {"--prometheus"},
@@ -31,10 +32,16 @@ class PrometheusEndpointMonitoring implements Monitoring {
   private volatile PrometheusMeterRegistry registry;
 
   @Override
-  public void configure(MonitoringContext context) {
+  public void meterRegistry(CompositeMeterRegistry meterRegistry) {
     if (enabled) {
       registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
-      context.meterRegistry().add(registry);
+      meterRegistry.add(registry);
+    }
+  }
+
+  @Override
+  public void configure(MonitoringContext context) {
+    if (enabled) {
       context.addHttpEndpoint(
           "metrics",
           "Prometheus metrics",

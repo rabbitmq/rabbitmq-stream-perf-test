@@ -360,7 +360,7 @@ class Utils {
     }
   }
 
-  final static class PerformanceMicrometerMetricsCollector extends MicrometerMetricsCollector {
+  static final class PerformanceMicrometerMetricsCollector extends MicrometerMetricsCollector {
 
     private final IntConsumer publisherCallback;
 

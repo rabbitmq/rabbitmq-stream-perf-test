@@ -263,16 +263,13 @@ public final class DefaultPerformanceMetrics implements PerformanceMetrics {
         printStream.println(description);
       }
 
+      // the Dropwizard registry must have been set before
       DropwizardMeterRegistry dropwizardMeterRegistry =
           this.meterRegistry.getRegistries().stream()
               .filter(r -> r instanceof DropwizardMeterRegistry)
               .map(r -> (DropwizardMeterRegistry) r)
               .findAny()
-              .orElseGet(MetricsUtils::dropwizardMeterRegistry);
-
-      if (!this.meterRegistry.getRegistries().contains(dropwizardMeterRegistry)) {
-        this.meterRegistry.add(dropwizardMeterRegistry);
-      }
+              .orElseThrow();
 
       ConsoleReporter fileReporter =
           ConsoleReporter.forRegistry(dropwizardMeterRegistry.getDropwizardRegistry())

@@ -14,6 +14,7 @@
 // info@rabbitmq.com.
 package com.rabbitmq.stream.perf;
 
+import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -30,13 +31,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import picocli.CommandLine.Option;
 
-class DebugEndpointMonitoring implements Monitoring {
+final class DebugEndpointMonitoring implements Monitoring {
 
   @Option(
       names = {"--monitoring"},
       description = "Enable HTTP endpoint for monitoring and debugging",
       defaultValue = "false")
   private boolean monitoring;
+
+  @Override
+  public void meterRegistry(CompositeMeterRegistry meterRegistry) {
+    // no op
+  }
 
   @Override
   public void configure(MonitoringContext context) {
