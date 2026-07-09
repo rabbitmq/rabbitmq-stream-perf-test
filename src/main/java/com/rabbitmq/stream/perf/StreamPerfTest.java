@@ -901,23 +901,11 @@ public class StreamPerfTest implements Callable<Integer> {
 
     CompositeMeterRegistry meterRegistry = new CompositeMeterRegistry();
     meterRegistry.config().commonTags(this.metricsTags);
+    // registries that need to back the composite from the start (e.g. Prometheus)
+    // must be added before any meter is registered, otherwise Micrometer warns
+    // that meters registered earlier will not be reflected in them
+    this.monitorings.forEach(m -> m.meterRegistry(meterRegistry));
     String metricsPrefix = "rabbitmq.stream";
-    if (this.metricsCommandLineArguments) {
-      Tags tags;
-      if (this.arguments == null || this.arguments.length == 0) {
-        tags = Tags.of("command_line", "");
-      } else {
-        tags = Tags.of("command_line", Utils.commandLineMetrics(this.arguments));
-      }
-      Gauge.builder(metricsPrefix + ".args", () -> Integer.valueOf(1))
-          .tags(tags)
-          .register(meterRegistry);
-    }
-    this.metricsCollector =
-        new PerformanceMicrometerMetricsCollector(
-            meterRegistry, metricsPrefix, this.includeBatchSizeMetric);
-
-    Counter producerConfirm = meterRegistry.counter(metricsPrefix + ".producer_confirmed");
 
     Supplier<String> memoryReportSupplier;
     if (this.memoryReport) {
@@ -966,10 +954,28 @@ public class StreamPerfTest implements Callable<Integer> {
 
     try {
 
-      if (meterRegistry.getRegistries().isEmpty()) {
-        // we need at least one to do the calculations
+      if (meterRegistry.getRegistries().isEmpty() || this.summaryFile) {
+        // we need at least one registry to do the calculations, and specifically a
+        // Dropwizard one if a summary file is requested, regardless of other registries
         meterRegistry.add(MetricsUtils.dropwizardMeterRegistry());
       }
+
+      if (this.metricsCommandLineArguments) {
+        Tags tags;
+        if (this.arguments == null || this.arguments.length == 0) {
+          tags = Tags.of("command_line", "");
+        } else {
+          tags = Tags.of("command_line", Utils.commandLineMetrics(this.arguments));
+        }
+        Gauge.builder(metricsPrefix + ".args", () -> Integer.valueOf(1))
+            .tags(tags)
+            .register(meterRegistry);
+      }
+      this.metricsCollector =
+          new PerformanceMicrometerMetricsCollector(
+              meterRegistry, metricsPrefix, this.includeBatchSizeMetric);
+
+      Counter producerConfirm = meterRegistry.counter(metricsPrefix + ".producer_confirmed");
 
       this.performanceMetrics =
           new DefaultPerformanceMetrics(

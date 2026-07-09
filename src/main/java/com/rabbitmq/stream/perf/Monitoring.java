@@ -14,7 +14,11 @@
 // info@rabbitmq.com.
 package com.rabbitmq.stream.perf;
 
+import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
+
 interface Monitoring {
+
+  void meterRegistry(CompositeMeterRegistry meterRegistry);
 
   void configure(MonitoringContext context);
 }
