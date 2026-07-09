@@ -517,7 +517,7 @@ public class StreamPerfTest implements Callable<Integer> {
   @CommandLine.Option(
       names = {"--requested-max-frame-size", "-rmfs"},
       description = "maximum frame size to request",
-      defaultValue = "1048576",
+      defaultValue = "5242880", // 1_048_576 (client default) x 5
       converter = Converters.ByteCapacityTypeConverter.class)
   private ByteCapacity requestedMaxFrameSize;
 
