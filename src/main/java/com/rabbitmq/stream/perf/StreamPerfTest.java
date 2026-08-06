@@ -1097,6 +1097,7 @@ public class StreamPerfTest implements Callable<Integer> {
                 SslContextBuilder.forClient()
                     .sslProvider(sslProvider)
                     .trustManager(Utils.TRUST_EVERYTHING_TRUST_MANAGER)
+                    .endpointIdentificationAlgorithm(null)
                     .build());
         environmentBuilder = tlsConfiguration.environmentBuilder();
         if (!this.sniServerNames.isEmpty()) {
