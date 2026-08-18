@@ -688,6 +688,12 @@ public class StreamPerfTest implements Callable<Integer> {
   private Credits credits;
 
   @CommandLine.Option(
+      names = {"--credit-unit"},
+      description = "unit for credits. Possible values: chunk, byte.",
+      defaultValue = "chunk")
+  private ConsumerFlowStrategy.CreditUnit creditUnit;
+
+  @CommandLine.Option(
       names = {"--heartbeat", "-b"},
       description = "requested heartbeat in seconds",
       defaultValue = "60",
@@ -1375,7 +1381,12 @@ public class StreamPerfTest implements Callable<Integer> {
                                   ConsumerFlowStrategy.creditEveryNthChunk(
                                       this.credits.initialCredits(), this.credits.n()));
                         } else {
-                          consumerBuilder.flow().initialCredits(this.initialCredits);
+                          if (this.creditUnit == ConsumerFlowStrategy.CreditUnit.CHUNK) {
+                            consumerBuilder.flow().initialCredits(this.initialCredits);
+                          } else {
+                            ByteCapacity initCredits = ByteCapacity.B(this.initialCredits);
+                            consumerBuilder.flow().initialCredits(initCredits);
+                          }
                         }
 
                         if (this.superStreams) {

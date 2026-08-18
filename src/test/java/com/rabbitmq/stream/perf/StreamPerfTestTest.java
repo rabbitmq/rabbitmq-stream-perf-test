@@ -21,6 +21,7 @@ import com.rabbitmq.stream.Address;
 import com.rabbitmq.stream.AddressResolver;
 import com.rabbitmq.stream.ByteCapacity;
 import com.rabbitmq.stream.Constants;
+import com.rabbitmq.stream.ConsumerFlowStrategy;
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.OffsetSpecification;
 import com.rabbitmq.stream.StreamCreator.LeaderLocator;
@@ -602,6 +603,21 @@ public class StreamPerfTestTest {
     waitRunEnds();
   }
 
+  @ParameterizedTest
+  @CsvSource({"CHUNK,10", "BYTE,500000"})
+  void shouldSupportCreditUnitFlag(ConsumerFlowStrategy.CreditUnit unit, int initialCredits)
+      throws Exception {
+    if (unit == ConsumerFlowStrategy.CreditUnit.BYTE && !cf.get().byteCreditSupported()) {
+      return;
+    }
+    Future<?> run = run(builder().creditUnit(unit).initialCredits(initialCredits));
+    waitUntilStreamExists(s);
+    waitOneSecond();
+    run.cancel(true);
+    waitRunEnds();
+    assertThat(streamExists(s)).isTrue();
+  }
+
   private static <T> Consumer<T> wrap(CallableConsumer<T> action) {
     return t -> {
       try {
@@ -662,7 +678,7 @@ public class StreamPerfTestTest {
   static class ArgumentsBuilder {
 
     private final Map<String, String> arguments =
-        new HashMap<String, String>() {
+        new HashMap<>() {
           {
             put("rpc-timeout", "20");
           }
@@ -856,6 +872,16 @@ public class StreamPerfTestTest {
 
     ArgumentsBuilder metricsFormatCompact() {
       arguments.put("metrics-format", "compact");
+      return this;
+    }
+
+    ArgumentsBuilder initialCredits(int initialCredits) {
+      arguments.put("initial-credits", String.valueOf(initialCredits));
+      return this;
+    }
+
+    ArgumentsBuilder creditUnit(ConsumerFlowStrategy.CreditUnit creditUnit) {
+      arguments.put("credit-unit", creditUnit.name().toLowerCase());
       return this;
     }
 
