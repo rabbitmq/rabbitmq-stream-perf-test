@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 as builder
+FROM ubuntu:26.04 AS builder
 
 ARG stream_perf_test_url="set-url-here"
 
@@ -12,7 +12,7 @@ RUN set -eux; \
 		gnupg \
 		jq
 
-ARG JAVA_VERSION="21"
+ARG JAVA_VERSION="25"
 
 RUN if [ "$(uname -m)" = "aarch64" ] || [ "$(uname -m)" = "arm64" ]; then echo "ARM"; ARCH="arm"; BUNDLE="jdk"; else echo "x86"; ARCH="x86"; BUNDLE="jdk"; fi \
     && wget "https://api.azul.com/zulu/download/community/v1.0/bundles/latest/?java_version=$JAVA_VERSION&ext=tar.gz&os=linux&arch=$ARCH&hw_bitness=64&release_status=ga&bundle_type=$BUNDLE" -O jdk-info.json
@@ -40,7 +40,7 @@ ARG PGP_KEYSERVER=hkps://keys.openpgp.org
 # For context, see https://github.com/docker-library/official-images/issues/4252
 
 # https://www.rabbitmq.com/signatures.html#importing-gpg
-ENV RABBITMQ_PGP_KEY_ID="0x0A9AF2115F4687BD29803A206B73A36E6026DFCA"
+ENV RABBITMQ_PGP_FINGERPRINT="0x0A9AF2115F4687BD29803A206B73A36E6026DFCA"
 ENV STREAM_PERF_TEST_HOME="/stream_perf_test"
 
 RUN set -eux; \
@@ -51,7 +51,7 @@ RUN set -eux; \
     echo "$STREAM_PERF_TEST_SHA256 /usr/local/src/stream-perf-test.jar" | sha256sum --check --strict -; \
     \
     export GNUPGHOME="$(mktemp -d)"; \
-    gpg --batch --keyserver "$PGP_KEYSERVER" --recv-keys "$RABBITMQ_PGP_KEY_ID"; \
+    gpg --batch --keyserver "$PGP_KEYSERVER" --recv-keys "$RABBITMQ_PGP_FINGERPRINT"; \
     gpg --batch --verify "/usr/local/src/stream-perf-test.jar.asc" "/usr/local/src/stream-perf-test.jar"; \
     gpgconf --kill all; \
     rm -rf "$GNUPGHOME"; \
@@ -59,7 +59,7 @@ RUN set -eux; \
     mkdir -p "$STREAM_PERF_TEST_HOME"; \
     cp /usr/local/src/stream-perf-test.jar $STREAM_PERF_TEST_HOME/stream-perf-test.jar
 
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 # we need locales support for characters like µ to show up correctly in the console
 RUN set -eux; \
@@ -72,11 +72,11 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*; \
 	locale-gen en_US.UTF-8
 
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
 
-ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk/jre
+ENV JAVA_HOME=/usr/lib/jvm/java-25-openjdk/jre
 RUN mkdir -p $JAVA_HOME
 COPY --from=builder /jre $JAVA_HOME/
 RUN ln -svT $JAVA_HOME/bin/java /usr/local/bin/java
