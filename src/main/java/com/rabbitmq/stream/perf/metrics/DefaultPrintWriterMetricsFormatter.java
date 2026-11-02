@@ -81,13 +81,12 @@ final class DefaultPrintWriterMetricsFormatter extends BaseMetricsFormatter {
       Supplier<String> memoryReportSupplier) {
     StringBuilder builder = new StringBuilder();
     builder.append(reportCount).append(", ");
-    counters.forEach(
-        (meterName, counter) -> {
-          long lastValue = lastMetersValues.get(meterName);
-          long currentValue = (long) counter.count();
-          builder.append(formatCounter.get(meterName).compute(lastValue, currentValue, duration));
-          lastMetersValues.put(meterName, currentValue);
-        });
+    counters.forEach((meterName, counter) -> {
+      long lastValue = lastMetersValues.get(meterName);
+      long currentValue = (long) counter.count();
+      builder.append(formatCounter.get(meterName).compute(lastValue, currentValue, duration));
+      lastMetersValues.put(meterName, currentValue);
+    });
     if (confirmLatency != null) {
       builder.append(formatLatency("confirm latency", confirmLatency)).append(", ");
     }

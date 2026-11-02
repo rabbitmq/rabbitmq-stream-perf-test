@@ -238,12 +238,11 @@ public class StreamPerfTestTest {
             .collect(Collectors.toList())
             .toArray(new String[] {});
 
-    waitAtMost(
-        () -> {
-          Map<String, StreamMetadata> metadata = client.metadata(expectedStreams);
-          boolean allExists = metadata.values().stream().allMatch(m -> m.isResponseOk());
-          return metadata.size() == streamCount && allExists;
-        });
+    waitAtMost(() -> {
+      Map<String, StreamMetadata> metadata = client.metadata(expectedStreams);
+      boolean allExists = metadata.values().stream().allMatch(m -> m.isResponseOk());
+      return metadata.size() == streamCount && allExists;
+    });
 
     waitOneSecond();
 
@@ -521,10 +520,9 @@ public class StreamPerfTestTest {
     client
         .metadata(streams.toArray(new String[0]))
         .values()
-        .forEach(
-            m ->
-                assertThat(m.getResponseCode())
-                    .isEqualTo(Constants.RESPONSE_CODE_STREAM_DOES_NOT_EXIST));
+        .forEach(m ->
+            assertThat(m.getResponseCode())
+                .isEqualTo(Constants.RESPONSE_CODE_STREAM_DOES_NOT_EXIST));
   }
 
   @Test
@@ -577,11 +575,10 @@ public class StreamPerfTestTest {
     try (Environment env = Environment.builder().build()) {
       env.consumerBuilder().stream(s)
           .offset(OffsetSpecification.first())
-          .messageHandler(
-              (ctx, msg) -> {
-                lastCommittedChunkId.set(ctx.committedChunkId());
-                receivedCount.incrementAndGet();
-              })
+          .messageHandler((ctx, msg) -> {
+            lastCommittedChunkId.set(ctx.committedChunkId());
+            receivedCount.incrementAndGet();
+          })
           .build();
       waitAtMost(() -> receivedCount.get() == expectedMessageCount);
       waitAtMost(() -> lastCommittedChunkId.get() == env.queryStreamStats(s).committedChunkId());
@@ -635,17 +632,16 @@ public class StreamPerfTestTest {
             address.port() == Client.DEFAULT_PORT
                 ? new Address("localhost", Client.DEFAULT_PORT)
                 : new Address("localhost", Client.DEFAULT_TLS_PORT);
-    return executor.submit(
-        () -> {
-          RunContext context =
-              StreamPerfTest.run(
-                  builder.build().split(" "),
-                  new PrintStream(out, true),
-                  new PrintStream(err, true),
-                  addressResolver);
-          exitCode.set(context.exitCode());
-          command.set(context.command());
-        });
+    return executor.submit(() -> {
+      RunContext context =
+          StreamPerfTest.run(
+              builder.build().split(" "),
+              new PrintStream(out, true),
+              new PrintStream(err, true),
+              addressResolver);
+      exitCode.set(context.exitCode());
+      command.set(context.command());
+    });
   }
 
   private static class HttpResponse {
