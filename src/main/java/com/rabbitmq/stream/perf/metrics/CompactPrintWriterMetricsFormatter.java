@@ -124,13 +124,12 @@ final class CompactPrintWriterMetricsFormatter extends BaseMetricsFormatter {
     StringBuilder builder =
         new StringBuilder().append(DATE_TIME_FORMATTER.format(LocalDateTime.now()));
 
-    counters.forEach(
-        (meterName, counter) -> {
-          long lastValue = lastMetersValues.get(meterName);
-          long currentValue = (long) counter.count();
-          builder.append(formatCounter.get(meterName).compute(lastValue, currentValue, duration));
-          lastMetersValues.put(meterName, currentValue);
-        });
+    counters.forEach((meterName, counter) -> {
+      long lastValue = lastMetersValues.get(meterName);
+      long currentValue = (long) counter.count();
+      builder.append(formatCounter.get(meterName).compute(lastValue, currentValue, duration));
+      lastMetersValues.put(meterName, currentValue);
+    });
 
     if (this.confirmLatency && confirmLatency != null) {
       builder.append(formatLatency("confirm latency", confirmLatency));

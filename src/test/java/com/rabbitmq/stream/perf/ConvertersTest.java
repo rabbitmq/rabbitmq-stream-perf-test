@@ -78,12 +78,11 @@ public class ConvertersTest {
     BackOffDelayPolicy policy = converter.convert(input);
     Arrays.stream(expectations.split("\\|"))
         .map(s -> s.split(":"))
-        .forEach(
-            attemptDelay -> {
-              int attempt = Integer.parseInt(attemptDelay[0]);
-              Duration expectedDelay = Duration.ofSeconds(Long.parseLong(attemptDelay[1]));
-              assertThat(policy.delay(attempt)).isEqualTo(expectedDelay);
-            });
+        .forEach(attemptDelay -> {
+          int attempt = Integer.parseInt(attemptDelay[0]);
+          Duration expectedDelay = Duration.ofSeconds(Long.parseLong(attemptDelay[1]));
+          assertThat(policy.delay(attempt)).isEqualTo(expectedDelay);
+        });
   }
 
   @ParameterizedTest

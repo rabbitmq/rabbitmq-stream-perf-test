@@ -337,18 +337,17 @@ final class TestUtils {
               .getRoot()
               .getStore(ExtensionContext.Namespace.GLOBAL)
               .getOrComputeIfAbsent(ExecutorServiceCloseableResourceWrapper.class);
-      wrapper.executorService.submit(
-          () -> {
-            try {
-              eventLoopGroup.shutdownGracefully(0, 0, SECONDS).get(10, SECONDS);
-            } catch (InterruptedException e) {
-              // happens at the end of the test suite
-              LOGGER.debug("Error while asynchronously closing Netty event loop group", e);
-              Thread.currentThread().interrupt();
-            } catch (Exception e) {
-              LOGGER.warn("Error while asynchronously closing Netty event loop group", e);
-            }
-          });
+      wrapper.executorService.submit(() -> {
+        try {
+          eventLoopGroup.shutdownGracefully(0, 0, SECONDS).get(10, SECONDS);
+        } catch (InterruptedException e) {
+          // happens at the end of the test suite
+          LOGGER.debug("Error while asynchronously closing Netty event loop group", e);
+          Thread.currentThread().interrupt();
+        } catch (Exception e) {
+          LOGGER.warn("Error while asynchronously closing Netty event loop group", e);
+        }
+      });
     }
 
     private static Field field(Class<?> cls, String name) {
@@ -441,12 +440,11 @@ final class TestUtils {
       extends BaseBrokerVersionAtLeastCondition {
 
     private AnnotationBrokerVersionAtLeastCondition() {
-      super(
-          context -> {
-            BrokerVersionAtLeast annotation =
-                context.getElement().get().getAnnotation(BrokerVersionAtLeast.class);
-            return annotation == null ? null : annotation.value().toString();
-          });
+      super(context -> {
+        BrokerVersionAtLeast annotation =
+            context.getElement().get().getAnnotation(BrokerVersionAtLeast.class);
+        return annotation == null ? null : annotation.value().toString();
+      });
     }
   }
 

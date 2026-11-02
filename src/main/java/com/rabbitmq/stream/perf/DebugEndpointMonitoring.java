@@ -120,7 +120,7 @@ final class DebugEndpointMonitoring implements Monitoring {
 
     private List<MonitorInfo> lockedMonitorsForDepth(MonitorInfo[] lockedMonitors, int depth) {
       return Stream.of(lockedMonitors)
-          .filter((lockedMonitor) -> lockedMonitor.getLockedStackDepth() == depth)
+          .filter(lockedMonitor -> lockedMonitor.getLockedStackDepth() == depth)
           .collect(Collectors.toList());
     }
 

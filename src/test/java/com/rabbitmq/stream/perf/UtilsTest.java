@@ -70,15 +70,14 @@ public class UtilsTest {
                 "50-500",
                 "stream-%d",
                 IntStream.range(50, 501).mapToObj(i -> format("stream-%d", i)).collect(toList())));
-    return arguments.flatMap(
-        arg -> {
-          String range = arg.get()[0].toString();
-          return range.contains("-")
-              ? Stream.of(
-                  of(range, arg.get()[1], arg.get()[2]),
-                  of(range.replace("-", ".."), arg.get()[1], arg.get()[2]))
-              : Stream.of(arg);
-        });
+    return arguments.flatMap(arg -> {
+      String range = arg.get()[0].toString();
+      return range.contains("-")
+          ? Stream.of(
+              of(range, arg.get()[1], arg.get()[2]),
+              of(range.replace("-", ".."), arg.get()[1], arg.get()[2]))
+          : Stream.of(arg);
+    });
   }
 
   @ParameterizedTest
@@ -105,11 +104,10 @@ public class UtilsTest {
             66_000,
             1_000_000,
             new Random().nextLong())
-        .forEach(
-            value -> {
-              Utils.writeLong(array, value);
-              assertThat(Utils.readLong(array)).isEqualTo(value);
-            });
+        .forEach(value -> {
+          Utils.writeLong(array, value);
+          assertThat(Utils.readLong(array)).isEqualTo(value);
+        });
   }
 
   @Test

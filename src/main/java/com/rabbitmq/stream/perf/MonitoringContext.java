@@ -73,13 +73,12 @@ class MonitoringContext {
               "{ \"name\" : \"StreamPerfTest Monitoring Endpoints\", \"endpoints\" : [");
       String endpointJson =
           endpoints.stream()
-              .map(
-                  endpoint ->
-                      "{\"name\" : \""
-                          + endpoint.description
-                          + "\", \"href\" : \""
-                          + url(hostname, endpoint.path)
-                          + "\"}")
+              .map(endpoint ->
+                  "{\"name\" : \""
+                      + endpoint.description
+                      + "\", \"href\" : \""
+                      + url(hostname, endpoint.path)
+                      + "\"}")
               .collect(Collectors.joining(","));
       builder.append(endpointJson);
       builder.append("]}");

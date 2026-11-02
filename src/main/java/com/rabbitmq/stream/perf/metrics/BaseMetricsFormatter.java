@@ -50,28 +50,26 @@ abstract class BaseMetricsFormatter implements MetricsFormatter {
     this.formatCounter = new HashMap<>();
     countersNamesAndLabels.entrySet().stream()
         .filter(entry -> !entry.getKey().contains("bytes"))
-        .forEach(
-            entry -> {
-              formatCounter.put(
-                  entry.getValue(),
-                  (lastValue, currentValue, duration) -> {
-                    long rate = 1000 * (currentValue - lastValue) / duration.toMillis();
-                    rates.get(entry.getValue()).set(rate);
-                    return formatNonByteCounter(entry.getValue(), rate);
-                  });
-            });
+        .forEach(entry -> {
+          formatCounter.put(
+              entry.getValue(),
+              (lastValue, currentValue, duration) -> {
+                long rate = 1000 * (currentValue - lastValue) / duration.toMillis();
+                rates.get(entry.getValue()).set(rate);
+                return formatNonByteCounter(entry.getValue(), rate);
+              });
+        });
 
     countersNamesAndLabels.entrySet().stream()
         .filter(entry -> entry.getKey().contains("bytes"))
-        .forEach(
-            entry -> {
-              formatCounter.put(
-                  entry.getValue(),
-                  (lastValue, currentValue, duration) -> {
-                    long rate = 1000 * (currentValue - lastValue) / duration.toMillis();
-                    return formatByteCounter(entry.getValue(), rate);
-                  });
-            });
+        .forEach(entry -> {
+          formatCounter.put(
+              entry.getValue(),
+              (lastValue, currentValue, duration) -> {
+                long rate = 1000 * (currentValue - lastValue) / duration.toMillis();
+                return formatByteCounter(entry.getValue(), rate);
+              });
+        });
   }
 
   protected abstract String formatNonByteCounter(String name, long value);

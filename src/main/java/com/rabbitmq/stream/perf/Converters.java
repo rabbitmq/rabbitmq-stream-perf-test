@@ -295,19 +295,18 @@ final class Converters {
           throwConversionException("'%s' is not valid, valid examples values: 10, 1-10", input);
         }
         Arrays.stream(fromTo)
-            .forEach(
-                v -> {
-                  try {
-                    int i = Integer.parseInt(v);
-                    if (i <= 0) {
-                      throwConversionException(
-                          "'%s' is not valid, the value must be a positive integer", v);
-                    }
-                  } catch (NumberFormatException e) {
-                    throwConversionException(
-                        "'%s' is not valid, the value must be a positive integer", v);
-                  }
-                });
+            .forEach(v -> {
+              try {
+                int i = Integer.parseInt(v);
+                if (i <= 0) {
+                  throwConversionException(
+                      "'%s' is not valid, the value must be a positive integer", v);
+                }
+              } catch (NumberFormatException e) {
+                throwConversionException(
+                    "'%s' is not valid, the value must be a positive integer", v);
+              }
+            });
         int from = Integer.parseInt(fromTo[0]);
         int to = Integer.parseInt(fromTo[1]);
         if (from >= to) {
