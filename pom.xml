@@ -49,7 +49,7 @@
     <slf4j.version>2.0.20</slf4j.version>
     <logback.version>1.6.6</logback.version>
     <netty.version>4.2.19.Final</netty.version>
-    <netty-tcnative.version>2.0.84.Final</netty-tcnative.version>
+    <netty-tcnative.version>2.0.85.Final</netty-tcnative.version>
     <metrics.version>4.2.40</metrics.version>
     <micrometer.version>1.17.2</micrometer.version>
     <picocli.version>4.7.7</picocli.version>
