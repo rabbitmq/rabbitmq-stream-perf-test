@@ -60,8 +60,6 @@
     <junit.jupiter.version>5.14.4</junit.jupiter.version>
     <assertj.version>3.27.7</assertj.version>
     <spotless.check.skip>true</spotless.check.skip>
-    <commons-lang3.version>3.13.0</commons-lang3.version>
-    <commons-codec.version>1.16.0</commons-codec.version>
     <maven.compiler.plugin.version>3.16.0</maven.compiler.plugin.version>
     <maven-surefire-plugin.version>3.6.1</maven-surefire-plugin.version>
     <spring-boot-maven-plugin.version>2.7.18</spring-boot-maven-plugin.version>
